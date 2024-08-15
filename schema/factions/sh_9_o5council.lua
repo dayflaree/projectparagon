@@ -1,0 +1,44 @@
+FACTION.name = "05 Council"
+FACTION.description = ""
+FACTION.color = Color(10, 10, 10)
+
+FACTION.isDefault = false
+
+FACTION.models = {
+    "models/player/suits/male_01_closed_coat_tie.mdl",
+    "models/player/suits/male_02_closed_coat_tie.mdl",
+    "models/player/suits/male_03_closed_coat_tie.mdl",
+    "models/player/suits/male_04_closed_coat_tie.mdl",
+    "models/player/suits/male_05_closed_coat_tie.mdl",
+    "models/player/suits/male_06_closed_coat_tie.mdl",
+    "models/player/suits/male_07_closed_coat_tie.mdl",
+    "models/player/suits/male_08_closed_coat_tie.mdl",
+    "models/player/suits/male_09_closed_coat_tie.mdl",
+}
+
+function FACTION:OnCharacterCreated(ply, char)
+    char:SetName("O5-"..Schema:ZeroNumber(math.random(1, 12), 2).." "..char:GetName())
+
+end
+
+function FACTION:OnSpawn(ply)
+    local char = ply:GetCharacter()
+    char:SetClass(nil)
+end
+
+function FACTION:OnTransferred(char)
+    char:SetClass(nil)
+end
+
+function FACTION:OnSpawn(ply)
+    local inventory = ply:GetCharacter():GetInventory()
+    local item = inventory:HasItem("longrange")
+    local item = inventory:HasItem("key6")
+
+    if not ( item ) then
+        inventory:Add("longrange", 1, {["frequency"] = ix.config.Get("foundationFrequency")})
+        inventory:Add("key6", 1)
+    end
+end
+
+FACTION_O5COUNCIL = FACTION.index
