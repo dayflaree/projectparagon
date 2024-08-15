@@ -4,7 +4,7 @@ PLUGIN.author = "MediQ"
 PLUGIN.description = "Add some custom cursors for helix framework"
 PLUGIN.version = 1.0
 
-IX_CURSOR_MATERIAL = Material("90/projectparagon/ui/player/cursor.png") -- Your own material for cursor
+IX_CURSOR_MATERIAL = Material("90/projectparagon/ui/player/hud/cursor.png") -- Your own material for cursor
 
 if CLIENT then
 
