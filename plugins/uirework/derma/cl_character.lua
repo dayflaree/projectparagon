@@ -138,7 +138,7 @@ function PANEL:Init()
 
 	-- create character button
 	local createButton = self.mainButtonList:Add("ixMenuButton")
-	createButton:SetText("create")
+	createButton:SetText("New Character")
 	createButton:DockMargin(0, 0, 0, ScreenScale(2))
 	createButton.DoClick = function()
 		local maximum = hook.Run("GetMaxPlayerCharacter", LocalPlayer()) or ix.config.Get("maxCharacters", 5)
@@ -155,7 +155,7 @@ function PANEL:Init()
 
 	-- load character button
 	self.loadButton = self.mainButtonList:Add("ixMenuButton")
-	self.loadButton:SetText("load")
+	self.loadButton:SetText("Load Character")
 	self.loadButton:DockMargin(0, 0, 0, ScreenScale(2))
 	self.loadButton.DoClick = function()
 		self:Dim()

@@ -44,8 +44,8 @@ SWEP.Category			    = "Other"
 SWEP.Spawnable              = true
 SWEP.AdminSpawnable         = true
 
-SWEP.ViewModel              = "models/weapons/v_crowbar.mdl"
-SWEP.WorldModel             = "models/weapons/w_crowbar.mdl"
+SWEP.ViewModel              = ""
+SWEP.WorldModel             = ""
 
 SWEP.Primary.ClipSize       = -1
 SWEP.Primary.DefaultClip    = -1
