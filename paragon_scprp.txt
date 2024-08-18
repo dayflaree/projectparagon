@@ -1,4 +1,4 @@
-"scrprp"
+"paragon_scprp"
 {
     "base"              "helix"
     "title"             "SCP:RP"
