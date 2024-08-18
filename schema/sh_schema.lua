@@ -13,34 +13,27 @@ ix.util.IncludeDir("meta")
 
 -- Schema config
 
-ix.config.SetDefault("color", Color(255, 255, 255))
-ix.config.SetDefault("walkSpeed", 80)
-ix.config.SetDefault("runSpeed", 180)
-ix.config.SetDefault("staminaDrain", 4)
-ix.config.SetDefault("staminaRegeneration", 2)
-ix.config.SetDefault("music", "projectparagon/ui/paragon_menu.mp3")
-ix.config.SetDefault("vignette", false)
-ix.config.SetDefault("communityURL", "https://discord.gg/nUBpfxDPee")
-ix.config.SetDefault("intro", false)
-ix.config.SetDefault("thirdperson", false)
-ix.config.SetDefault("allowVoice", true)
-ix.config.SetDefault("inventoryHeight", 2)
-ix.config.SetDefault("inventoryWidth", 4)
-ix.config.SetDefault("areaTickTime", 0)
-ix.config.Set("color", Color(255, 255, 255))
-ix.config.Set("walkSpeed", 100)
-ix.config.Set("runSpeed", 200)
-ix.config.Set("staminaDrain", 4)
-ix.config.Set("staminaRegeneration", 2)
-ix.config.Set("music", "projectparagon/ui/paragon_menu.mp3")
-ix.config.Set("vignette", false)
-ix.config.Set("communityURL", "https://discord.gg/nUBpfxDPee")
-ix.config.Set("intro", false)
-ix.config.Set("thirdperson", false)
-ix.config.Set("allowVoice", true)
-ix.config.Set("inventoryHeight", 2)
-ix.config.Set("inventoryWidth", 4)
-ix.config.Set("areaTickTime", 0)
+local config = {
+    color = Color(255, 255, 255),
+    walkSpeed = 80,
+    runSpeed = 180,
+    staminaDrain = 4,
+    staminaRegeneration = 2,
+    music = "projectparagon/ui/paragon_menu.mp3",
+    vignette = false,
+    communityURL = "https://discord.gg/nUBpfxDPee",
+    intro = false,
+    thirdperson = false,
+    allowVoice = true,
+    inventoryHeight = 2,
+    inventoryWidth = 4,
+    areaTickTime = 0
+}
+
+for k, v in pairs(config) do
+    ix.config.SetDefault(k, v)
+    ix.config.ForceSet(k, v)
+end
 
 -- Schema playermodels
 player_manager.AddValidModel("Passive", "models/cpthazama/scp/dclass.mdl")
