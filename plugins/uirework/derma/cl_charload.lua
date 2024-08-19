@@ -141,22 +141,6 @@ function PANEL:Init()
 			self.character = character
 			self:SetActiveSubpanel("delete")
 		end
-		deleteButton.Paint = function(self, w, h)
-			if !self:IsHovered() then
-				surface.SetDrawColor(50, 50, 50, 255)
-				surface.SetMaterial(menublack)
-				surface.DrawTexturedRect(0, 0, w, h)
-				
-				surface.SetDrawColor(color_white)
-			else
-				surface.SetDrawColor(20, 20, 20, 255)
-				surface.DrawRect(0, 0, w, h)
-				
-				surface.SetDrawColor(Color(100, 100, 100, 255))
-			end
-	
-			surface.DrawOutlinedRect(0, 0, w, h)
-		end
 
 		local loadButton = image:Add("ixMenuButton")
 		loadButton:SetText("Load")
@@ -172,22 +156,6 @@ function PANEL:Init()
 				net.SendToServer()
 			end, true)
 		end
-		loadButton.Paint = function(self, w, h)
-			if !self:IsHovered() then
-				surface.SetDrawColor(50, 50, 50, 255)
-				surface.SetMaterial(menublack)
-				surface.DrawTexturedRect(0, 0, w, h)
-				
-				surface.SetDrawColor(color_white)
-			else
-				surface.SetDrawColor(20, 20, 20, 255)
-				surface.DrawRect(0, 0, w, h)
-				
-				surface.SetDrawColor(Color(100, 100, 100, 255))
-			end
-	
-			surface.DrawOutlinedRect(0, 0, w, h)
-		end
 	end
 
 	local back = self.panel:Add("ixMenuButton")
@@ -197,22 +165,6 @@ function PANEL:Init()
 	back.DoClick = function()
 		self:SlideDown()
 		parent.mainPanel:Undim()
-	end
-	back.Paint = function(self, w, h)
-		if !self:IsHovered() then
-			surface.SetDrawColor(50, 50, 50, 255)
-			surface.SetMaterial(menublack)
-			surface.DrawTexturedRect(0, 0, w, h)
-			
-			surface.SetDrawColor(color_white)
-		else
-			surface.SetDrawColor(20, 20, 20, 255)
-			surface.DrawRect(0, 0, w, h)
-			
-			surface.SetDrawColor(Color(100, 100, 100, 255))
-		end
-
-		surface.DrawOutlinedRect(0, 0, w, h)
 	end
 
 	-- character deletion panel
@@ -284,7 +236,6 @@ function PANEL:Init()
 	yes:SetFont("Font-Elements-ScreenScale10")
 	yes:SetText(string.upper("yes"))
 	yes:SetContentAlignment(5)
-	yes.Paint = function(self, w, h) end
 	yes.DoClick = function()
 		self.CharacterCount = self.CharacterCount - 1
 
@@ -312,22 +263,6 @@ function PANEL:Init()
 
 		self.characterPanel:SetPos(0, 0)
 	end
-	yes.Paint = function(self, w, h)
-		if !self:IsHovered() then
-			surface.SetDrawColor(50, 50, 50, 255)
-			surface.SetMaterial(menublack)
-			surface.DrawTexturedRect(0, 0, w, h)
-			
-			surface.SetDrawColor(color_white)
-		else
-			surface.SetDrawColor(20, 20, 20, 255)
-			surface.DrawRect(0, 0, w, h)
-			
-			surface.SetDrawColor(Color(100, 100, 100, 255))
-		end
-
-		surface.DrawOutlinedRect(0, 0, w, h)
-	end
 
 	local no = yesnoPanel:Add("ixMenuButton")
 	no:Dock(LEFT)
@@ -335,25 +270,8 @@ function PANEL:Init()
 	no:SetFont("Font-Elements-ScreenScale10")
 	no:SetText(string.upper("no"))
 	no:SetContentAlignment(5)
-	no.Paint = function(self, w, h) end
 	no.DoClick = function()
 		self:SetActiveSubpanel("main")
-	end
-	no.Paint = function(self, w, h)
-		if !self:IsHovered() then
-			surface.SetDrawColor(50, 50, 50, 255)
-			surface.SetMaterial(menublack)
-			surface.DrawTexturedRect(0, 0, w, h)
-			
-			surface.SetDrawColor(color_white)
-		else
-			surface.SetDrawColor(20, 20, 20, 255)
-			surface.DrawRect(0, 0, w, h)
-			
-			surface.SetDrawColor(Color(100, 100, 100, 255))
-		end
-
-		surface.DrawOutlinedRect(0, 0, w, h)
 	end
 
 	-- finalize setup
@@ -368,15 +286,6 @@ function PANEL:OnCharacterDeleted(character)
 		self:SlideDown()
 		parent.mainPanel.loadButton:SetDisabled(true)
 		parent.mainPanel.loadButton:SetTextColor(Color(90, 90, 90, 255))
-
-		parent.mainPanel.loadButton.Paint = function( self, w, h )
-			surface.SetDrawColor(Color(0, 0, 0, 0));
-			surface.DrawRect(0,0, w, h);
-
-			if self:IsHovered() and (bHasCharacter) then
-				draw.RoundedBox( 10, 0, 0, self:GetWide(), self:GetTall(), Color(78, 79, 100, 240) )
-			end
-		end
 
 		parent.mainPanel.loadButton.OnCursorEntered = function()
 			if (!bHasCharacter) then
