@@ -1,7 +1,0 @@
-"scrprp"
-{
-    "base"              "helix"
-    "title"             "SCP:RP"
-    "author"            "Siro"
-    "menusystem"        "1"
-}
