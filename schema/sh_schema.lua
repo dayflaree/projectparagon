@@ -24,7 +24,7 @@ local config = {
     inventoryWidth = 4,
     music = "projectparagon/ui/paragon_menu.mp3",
     runSpeed = 180,
-    staminaDrain = 4,
+    staminaDrain = 2.6,
     staminaRegeneration = 2,
     thirdperson = false,
     vignette = false,
@@ -37,9 +37,9 @@ for k, v in pairs(config) do
 end
 
 // Schema playermodels
-player_manager.AddValidModel("Passive", "models/cpthazama/scp/dclass.mdl")
-player_manager.AddValidModel("Passive", "models/cpthazama/scp/scientist.mdl")
+player_manager.AddValidModel("Passive", "models/painkiller_76/sf2/classd/classd.mdl")
 player_manager.AddValidModel("Passive", "models/cpthazama/scp/janitor.mdl")
+player_manager.AddValidModel("Passive", "models/painkiller_76/sf2/clerk/clerk.mdl")
 player_manager.AddValidHands("Passive", "models/duck/player/d_class_player_vm.mdl", 0, "00000000")
 
 player_manager.AddValidModel("Combatant", "models/cpthazama/scp/guard.mdl")

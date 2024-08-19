@@ -123,13 +123,6 @@ function PANEL:Init()
 	self.bUsingCharacter = LocalPlayer().GetCharacter and LocalPlayer():GetCharacter()
 	self:DockPadding(padding, padding, padding, padding)
 
-	local infoLabel = self:Add("DLabel")
-	infoLabel:SetTextColor(Color(255, 255, 255, 25))
-	infoLabel:SetFont("ixMenuMiniFont")
-	infoLabel:SetText(L("helix") .. " " .. GAMEMODE.Version)
-	infoLabel:SizeToContents()
-	infoLabel:SetPos(ScrW() - infoLabel:GetWide() - 4, ScrH() - infoLabel:GetTall() - 4)
-
 	-- button list
 	self.mainButtonList = self:Add("ixCharMenuButtonList")
 	self.mainButtonList:Dock(LEFT)

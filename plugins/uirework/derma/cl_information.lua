@@ -253,22 +253,7 @@ end
 vgui.Register("ixCharacterInfo", PANEL, "DScrollPanel")
 
 
-/*
-hook.Add("CreateMenuButtons", "ixCharInfo", function(tabs)
-	tabs["you"] = {
-		bHideBackground = true,
-		buttonColor = team.GetColor(LocalPlayer():Team()),
-		Create = function(info, container)
-			container.infoPanel = container:Add("ixCharacterInfo")
 
-			container.OnMouseReleased = function(this, key)
-				if (key == MOUSE_RIGHT) then
-					this.infoPanel:OnSubpanelRightClick()
-				end
-			end
-		end,
-		OnSelected = function(info, container)
-			container.infoPanel:Update(LocalPlayer():GetCharacter())
-		end,
-	}
-end)
+hook.Add("CreateMenuButtons", "ixCharInfo", function(tabs)
+	tabs["you"] = nil
+  end)
