@@ -82,7 +82,7 @@ PANEL = {}
 
 function PANEL:Init()
 	local parent = self:GetParent()
-	self:SetSize(parent:GetWide() * 0.2, parent:GetTall())
+	self:SetSize(parent:GetWide() * 0.3, parent:GetTall())
 
 	self:GetVBar():SetWide(0)
 	self:GetVBar():SetVisible(false)
@@ -128,10 +128,10 @@ function PANEL:Init()
 	self.mainButtonList:Dock(LEFT)
 	self.mainButtonList:DockMargin(ScreenScale(64), ScreenScale(80), 0, 0)
 
-
 	-- create character button
 	local createButton = self.mainButtonList:Add("ixMenuButton")
 	createButton:SetText("New Character")
+	createButton:SetTall(createButton:GetTall() * 1.5)
 	createButton:DockMargin(0, 0, 0, ScreenScale(2))
 	createButton.DoClick = function()
 		local maximum = hook.Run("GetMaxPlayerCharacter", LocalPlayer()) or ix.config.Get("maxCharacters", 5)
@@ -149,6 +149,7 @@ function PANEL:Init()
 	-- load character button
 	self.loadButton = self.mainButtonList:Add("ixMenuButton")
 	self.loadButton:SetText("Load Character")
+	self.loadButton:SetTall(self.loadButton:GetTall() * 1.5)
 	self.loadButton:DockMargin(0, 0, 0, ScreenScale(2))
 	self.loadButton.DoClick = function()
 		self:Dim()
@@ -170,6 +171,7 @@ function PANEL:Init()
 
 		local extraButton = self.mainButtonList:Add("ixMenuButton")
 		extraButton:SetText(extraText, true)
+		extraButton:SetTall(extraButton:GetTall() * 1.5)
 		extraButton:DockMargin(0, 0, 0, ScreenScale(2))
 		extraButton.DoClick = function()
 			gui.OpenURL(extraURL)
@@ -196,6 +198,8 @@ function PANEL:UpdateReturnButton(bValue)
 	end
 
 	self.returnButton:SetText(self.bUsingCharacter and "return" or "leave")
+	self.returnButton:SizeToContents()
+	self.returnButton:SetTall(self.returnButton:GetTall() * 1.5)
 end
 
 function PANEL:OnDim()
