@@ -20,8 +20,10 @@ function PLUGIN:PlayerUse(ply, ent)
     if ( ent.ixNextUse > CurTime() ) then return false end
     ent.ixNextUse = CurTime() + 2
 
+    local accessLevel = char:GetAccessLevel()
+
     local hasAccess = false
-    if ( ply:GetAccessLevel() >= level ) then
+    if ( accessLevel >= level ) then
         hasAccess = true
     end
 
@@ -41,7 +43,7 @@ function PLUGIN:PlayerUse(ply, ent)
             ix.chat.Send(ply, "me", self.messagesAllowed[math.random(1, #self.messagesAllowed)])
             ply.ixNextUseMe = CurTime() + 5
         end
-    elseif ( ply:GetAccessLevel() == 0 ) then
+    elseif ( accessLevel == 0 ) then
         debugoverlay.Text(trace.HitPos, "Access Denied, No Keycard", 1)
 
         if ( ply.ixNextUseMe < CurTime() and self.messagesDenied and #self.messagesDenied > 0 ) then
@@ -50,7 +52,7 @@ function PLUGIN:PlayerUse(ply, ent)
         end
 
         return false
-    elseif ( ply:GetAccessLevel() < level ) then
+    elseif ( accessLevel < level ) then
         EmitSound("scp/sfx/interact/keycarduse2.wav", trace.HitPos, ply:EntIndex())
         debugoverlay.Text(trace.HitPos, "Access Denied", 1)
     

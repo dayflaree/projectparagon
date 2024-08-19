@@ -6,7 +6,8 @@ function CHAR:GetAccessLevel()
     local inventory = self:GetInventory()
     if ( !inventory ) then return 0 end
 
-    for key, level in pairs(PLUGIN.accessLevels) do
+    for key, level in SortedPairs(PLUGIN.accessLevels, true) do
+        print(key, level)
         if ( inventory:HasItem(key) ) then
             return level
         end
