@@ -19,6 +19,8 @@ function Schema:PlayerInteractItem(ply, action, item)
 end
 
 function Schema:PlayerModelChanged(ply, model)
+    if ( !IsValid(ply) or ply:IsBot() ) then return end
+
     ply:SetupHands()
 end
 
