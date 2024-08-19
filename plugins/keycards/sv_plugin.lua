@@ -65,20 +65,13 @@ function PLUGIN:PlayerUse(ply, ent)
     end
 end
 
-function PLUGIN:SaveData()
-    for k, v in ipairs(ents.FindByClass("func_button")) do
-        local level = self:GetLevel(v)
-        if ( level > 0 ) then
-            self:SetLevel(v, level)
-        end
-    end
-end
-
 function PLUGIN:LoadData()
     for k, v in ipairs(ents.FindByClass("func_button")) do
         local level = file.Read("helix/" .. engine.ActiveGamemode() .. "/" .. game.GetMap() .. "/doorlevels/" .. v:MapCreationID() .. ".txt", "DATA")
-        if ( level ) then
-            self:SetLevel(v, level)
+        level = tonumber(level) or 0
+
+        if ( level > 0 ) then
+            v:SetNetVar("level", level)
         end
     end
 end
