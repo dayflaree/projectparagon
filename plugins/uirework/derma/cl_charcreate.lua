@@ -486,6 +486,7 @@ function PANEL:VerifyProgression(name)
 
 	return true
 end
+
 function PANEL:Paint(width, height)
 	surface.SetDrawColor(150, 150, 150, 255)
 	surface.SetMaterial(menublack)

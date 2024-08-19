@@ -132,7 +132,7 @@ function PANEL:Init()
 	local createButton = self.mainButtonList:Add("ixMenuButton")
 	createButton:SetText("New Character")
 	createButton:SetTall(createButton:GetTall() * 1.5)
-	createButton:DockMargin(0, 0, 0, ScreenScale(2))
+	createButton:DockMargin(0, 0, 0, ScreenScale(8))
 	createButton.DoClick = function()
 		local maximum = hook.Run("GetMaxPlayerCharacter", LocalPlayer()) or ix.config.Get("maxCharacters", 5)
 		-- don't allow creation if we've hit the character limit
@@ -150,7 +150,7 @@ function PANEL:Init()
 	self.loadButton = self.mainButtonList:Add("ixMenuButton")
 	self.loadButton:SetText("Load Character")
 	self.loadButton:SetTall(self.loadButton:GetTall() * 1.5)
-	self.loadButton:DockMargin(0, 0, 0, ScreenScale(2))
+	self.loadButton:DockMargin(0, 0, 0, ScreenScale(8))
 	self.loadButton.DoClick = function()
 		self:Dim()
 		parent.loadCharacterPanel:SlideUp()
@@ -172,7 +172,7 @@ function PANEL:Init()
 		local extraButton = self.mainButtonList:Add("ixMenuButton")
 		extraButton:SetText(extraText, true)
 		extraButton:SetTall(extraButton:GetTall() * 1.5)
-		extraButton:DockMargin(0, 0, 0, ScreenScale(2))
+		extraButton:DockMargin(0, 0, 0, ScreenScale(8))
 		extraButton.DoClick = function()
 			gui.OpenURL(extraURL)
 		end
@@ -185,7 +185,11 @@ function PANEL:Init()
 		if (self.bUsingCharacter) then
 			parent:Close()
 		else
-			RunConsoleCommand("disconnect")
+			Derma_Query("Are you sure you want to leave?", "Helix", "Yes", function()
+				self:Dim(2, function()
+					RunConsoleCommand("disconnect")
+				end)
+			end, "No")
 		end
 	end
 
@@ -249,6 +253,8 @@ function PANEL:Init()
 
 		ix.gui.characterMenu:Remove()
 	end
+
+	ix.gui.characterMenu = self
 
 	self:SetSize(ScrW(), ScrH())
 	self:SetPos(0, 0)
@@ -453,6 +459,7 @@ vgui.Register("ixCharMenu", PANEL, "EditablePanel")
 if (IsValid(ix.gui.characterMenu)) then
 	ix.gui.characterMenu:Remove()
 
-	--TODO: REMOVE ME
-	ix.gui.characterMenu = vgui.Create("ixCharMenu")
+	timer.Simple(0.1, function()
+		ix.gui.characterMenu = vgui.Create("ixCharMenu")
+	end)
 end

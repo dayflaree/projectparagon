@@ -1,261 +1,14 @@
 local menublack = ix.util.GetMaterial("90/projectparagon/ui/menu/menu_black.png")
 local menuwhite = ix.util.GetMaterial("90/projectparagon/ui/menu/menu_white.png")
 
-local errorModel = "models/error.mdl"
-local PANEL = {}
-
-AccessorFunc(PANEL, "animationTime", "AnimationTime", FORCE_NUMBER)
-
-local function SetCharacter(self, character)
-	self.character = character
-
-	if (character) then
-		self:SetModel(character:GetModel())
-		self:SetSkin(character:GetData("skin", 0))
-
-		for i = 0, (self:GetNumBodyGroups() - 1) do
-			self:SetBodygroup(i, 0)
-		end
-
-		local bodygroups = character:GetData("groups", nil)
-
-		if (istable(bodygroups)) then
-			for k, v in pairs(bodygroups) do
-				self:SetBodygroup(k, v)
-			end
-		end
-	else
-		self:SetModel(errorModel)
-	end
-end
-
-local function GetCharacter(self)
-	return self.character
-end
-
-function PANEL:Init()
-	self.activeCharacter = ClientsideModel(errorModel)
-	self.activeCharacter:SetNoDraw(true)
-	self.activeCharacter.SetCharacter = SetCharacter
-	self.activeCharacter.GetCharacter = GetCharacter
-
-	self.lastCharacter = ClientsideModel(errorModel)
-	self.lastCharacter:SetNoDraw(true)
-	self.lastCharacter.SetCharacter = SetCharacter
-	self.lastCharacter.GetCharacter = GetCharacter
-
-	self.animationTime = 0.5
-
-	self.shadeY = 0
-	self.shadeHeight = 0
-
-	self.cameraPosition = Vector(80, 0, 35)
-	self.cameraAngle = Angle(0, 180, 0)
-	self.lastPaint = 0
-end
-
-function PANEL:ResetSequence(model, lastModel)
-	local sequence = model:LookupSequence("idle_unarmed")
-
-	if (sequence <= 0) then
-		sequence = model:SelectWeightedSequence(ACT_IDLE)
-	end
-
-	if (sequence > 0) then
-		model:ResetSequence(sequence)
-	else
-		local found = false
-
-		for _, v in ipairs(model:GetSequenceList()) do
-			if ((v:lower():find("idle") or v:lower():find("fly")) and v != "idlenoise") then
-				model:ResetSequence(v)
-				found = true
-
-				break
-			end
-		end
-
-		if (!found) then
-			model:ResetSequence(4)
-		end
-	end
-
-	model:SetIK(false)
-
-	-- copy cycle if we can to avoid a jarring transition from resetting the sequence
-	if (lastModel) then
-		model:SetCycle(lastModel:GetCycle())
-	end
-end
-
-function PANEL:RunAnimation(model)
-	model:FrameAdvance((RealTime() - self.lastPaint) * 0.5)
-end
-
-function PANEL:LayoutEntity(model)
-	model:SetIK(false)
-
-	self:RunAnimation(model)
-end
-
-function PANEL:SetActiveCharacter(character)
-	self.shadeY = self:GetTall()
-	self.shadeHeight = self:GetTall()
-
-	-- set character immediately if we're an error (something isn't selected yet)
-	if (self.activeCharacter:GetModel() == errorModel) then
-		self.activeCharacter:SetCharacter(character)
-		self:ResetSequence(self.activeCharacter)
-
-		return
-	end
-
-	-- if the animation is already playing, we update its parameters so we can avoid restarting
-	local shade = self:GetTweenAnimation(1)
-	local shadeHide = self:GetTweenAnimation(2)
-
-	if (shade) then
-		shade.newCharacter = character
-		return
-	elseif (shadeHide) then
-		shadeHide.queuedCharacter = character
-		return
-	end
-
-	self.lastCharacter:SetCharacter(self.activeCharacter:GetCharacter())
-	self:ResetSequence(self.lastCharacter, self.activeCharacter)
-
-	shade = self:CreateAnimation(self.animationTime * 0.5, {
-		index = 1,
-		target = {
-			shadeY = 0,
-			shadeHeight = self:GetTall()
-		},
-		easing = "linear",
-
-		OnComplete = function(shadeAnimation, shadePanel)
-			shadePanel.activeCharacter:SetCharacter(shadeAnimation.newCharacter)
-			shadePanel:ResetSequence(shadePanel.activeCharacter)
-
-			shadePanel:CreateAnimation(shadePanel.animationTime, {
-				index = 2,
-				target = {shadeHeight = 0},
-				easing = "outQuint",
-
-				OnComplete = function(animation, panel)
-					if (animation.queuedCharacter) then
-						panel:SetActiveCharacter(animation.queuedCharacter)
-					else
-						panel.lastCharacter:SetCharacter(nil)
-					end
-				end
-			})
-		end
-	})
-
-	shade.newCharacter = character
-end
-
-function PANEL:Paint(width, height)
-	local x, y = self:LocalToScreen(0, 0)
-	local bTransition = self.lastCharacter:GetModel() != errorModel
-	local modelFOV = (ScrW() > ScrH() * 1.8) and 92 or 70
-
-	cam.Start3D(self.cameraPosition, self.cameraAngle, modelFOV, x, y, width, height)
-		render.SuppressEngineLighting(true)
-		render.SetLightingOrigin(self.activeCharacter:GetPos())
-
-		-- setup lighting
-		render.SetModelLighting(0, 1.5, 1.5, 1.5)
-
-		for i = 1, 4 do
-			render.SetModelLighting(i, 0.4, 0.4, 0.4)
-		end
-
-		render.SetModelLighting(5, 0.04, 0.04, 0.04)
-
-		-- clip anything out of bounds
-		local curparent = self
-		local rightx = self:GetWide()
-		local leftx = 0
-		local topy = 0
-		local bottomy = self:GetTall()
-		local previous = curparent
-
-		while (curparent:GetParent() != nil) do
-			local lastX, lastY = previous:GetPos()
-			curparent = curparent:GetParent()
-
-			topy = math.Max(lastY, topy + lastY)
-			leftx = math.Max(lastX, leftx + lastX)
-			bottomy = math.Min(lastY + previous:GetTall(), bottomy + lastY)
-			rightx = math.Min(lastX + previous:GetWide(), rightx + lastX)
-
-			previous = curparent
-		end
-
-		ix.util.ResetStencilValues()
-		render.SetStencilEnable(true)
-			render.SetStencilWriteMask(30)
-			render.SetStencilTestMask(30)
-			render.SetStencilReferenceValue(31)
-
-			render.SetStencilCompareFunction(STENCIL_ALWAYS)
-			render.SetStencilPassOperation(STENCIL_REPLACE)
-			render.SetStencilFailOperation(STENCIL_KEEP)
-			render.SetStencilZFailOperation(STENCIL_KEEP)
-
-			self:LayoutEntity(self.activeCharacter)
-
-			if (bTransition) then
-				-- only need to layout while it's used
-				self:LayoutEntity(self.lastCharacter)
-
-				render.SetScissorRect(leftx, topy, rightx, bottomy - (self:GetTall() - self.shadeHeight), true)
-				self.lastCharacter:DrawModel()
-
-				render.SetScissorRect(leftx, topy + self.shadeHeight, rightx, bottomy, true)
-				self.activeCharacter:DrawModel()
-
-				render.SetScissorRect(leftx, topy, rightx, bottomy, true)
-			else
-				self.activeCharacter:DrawModel()
-			end
-
-			render.SetStencilCompareFunction(STENCIL_EQUAL)
-			render.SetStencilPassOperation(STENCIL_KEEP)
-
-			cam.Start2D()
-				derma.SkinFunc("PaintCharacterTransitionOverlay", self, 0, self.shadeY, width, self.shadeHeight)
-			cam.End2D()
-		render.SetStencilEnable(false)
-
-		render.SetScissorRect(0, 0, 0, 0, false)
-		render.SuppressEngineLighting(false)
-	cam.End3D()
-
-	self.lastPaint = RealTime()
-end
-
-function PANEL:OnRemove()
-	self.lastCharacter:Remove()
-	self.activeCharacter:Remove()
-end
-
-vgui.Register("ixCharMenuCarousel", PANEL, "Panel")
-
 -- character load panel
-PANEL = {}
+local PANEL = {}
 
 AccessorFunc(PANEL, "animationTime", "AnimationTime", FORCE_NUMBER)
 AccessorFunc(PANEL, "backgroundFraction", "BackgroundFraction", FORCE_NUMBER)
 
 function PANEL:Init()
 	local parent = self:GetParent()
-	local padding = self:GetPadding()
-	local halfWidth = parent:GetWide() * 0.5 - (padding * 2)
-	local halfHeight = parent:GetTall() * 0.5 - (padding * 2)
-	local modelFOV = (ScrW() > ScrH() * 1.8) and 102 or 78
 
 	self.animationTime = 1
 	self.backgroundFraction = 1
@@ -271,64 +24,217 @@ function PANEL:Init()
 		})
 	end
 
-	-- character button list
-	local controlList = self.panel:Add("Panel")
-	controlList:Dock(LEFT)
-	controlList:SetSize(halfWidth, halfHeight)
+	self.panel.avoidPadding = true
 
-	local back = controlList:Add("ixMenuButton")
+	-- Character Count
+	local Count = 0
+
+	for _, _ in pairs(ix.characters) do
+		Count = Count + 1
+	end
+
+	self.CharacterCount = Count
+
+	local charImageH = ScreenScale(192)
+	local charPanelW = ScreenScale(128)
+	local charTextH = ScreenScale(16)
+	local margin = ScreenScale(8)
+
+	local panelLoad = self.panel:Add("Panel")
+
+	panelLoad:SetSize((6) * charPanelW + ((4 - 1) * margin), ScreenScale(192))
+	panelLoad:Center()
+
+	self.charactersPanel = panelLoad:Add("Panel")
+	self.charactersPanel:SetSize(panelLoad:GetWide(), ScreenScale(192))
+	self.charactersPanel:Dock(TOP)
+
+	self.characterPanel = self.charactersPanel:Add("Panel")
+
+	if self.CharacterCount == 1 then
+		self.characterPanel:SetSize(charPanelW, charImageH)
+	else
+		self.characterPanel:SetSize((self.CharacterCount) * charPanelW + ((self.CharacterCount - 1) * margin), charImageH)
+	end
+
+	self.characterPanel:Center()
+	local x, y = self.characterPanel:GetPos()
+	self.characterPanel:SetPos(x, 0)
+
+	for i = 1, #ix.characters do
+		local id = ix.characters[i]
+		local character = ix.char.loaded[id]
+
+		if (!character) then
+			continue
+		end
+
+		local index = character:GetFaction()
+		local faction = ix.faction.indices[index]
+
+		local image = self.characterPanel:Add("DPanel")
+		image:Dock(LEFT)
+
+		if i == 1 then
+			image:DockMargin(0, 0, 5, 0)
+		else
+			image:DockMargin(0, 0, 5, 0)
+		end
+
+		image.id = character:GetID()
+		image:SetSize( charPanelW, charImageH )
+		image.Paint = function(self, w, h)
+			surface.SetDrawColor(color_white)
+			surface.SetMaterial(menublack)
+			surface.DrawTexturedRect(0, 0, h, h)
+			surface.DrawOutlinedRect(0, 0, w, h)
+		end
+
+		local model = image:Add("ixModelPanel")
+		model:SetModel(character:GetModel())
+		model:Dock(FILL)
+		model:SetFOV(ScreenScale(16))
+		model.PaintModel = model.Paint
+		model.LayoutEntity = function(self)
+			local entity = self.Entity
+		
+			entity:SetAngles(Angle(0, 45, 0))
+			entity:SetIK(false)
+		
+			if (self.copyLocalSequence) then
+				entity:SetSequence(LocalPlayer():GetSequence())
+				entity:SetPoseParameter("move_yaw", 360 * LocalPlayer():GetPoseParameter("move_yaw") - 180)
+			end
+		
+			self:RunAnimation()
+		end
+
+		local nameText = image:Add("ixLabel")
+		nameText:SetFont("Font-Elements-ScreenScale6")
+
+		if string.len(character:GetName()) > 32 then
+			nameText:SetText(string.upper(string.sub(character:GetName(), 1, 16) .."..."))
+		else
+			nameText:SetText(string.upper(character:GetName()))
+		end
+
+		nameText:SizeToContents()
+		nameText:Dock(TOP)
+		nameText:DockMargin(0, ScreenScale(10 / 3), 0, 0)
+		nameText:SetContentAlignment(5)
+
+		local factionText = image:Add("ixLabel")
+		factionText:SetFont("Font-Elements-ScreenScale8")
+		factionText:SetText(string.upper(faction.name))
+
+		factionText:SizeToContents()
+		factionText:Dock(TOP)
+		factionText:SetContentAlignment(5)
+		factionText:SetTextColor(team.GetColor(faction.index))
+
+		local deleteButton = image:Add("ixMenuButton")
+		deleteButton:SetText("Delete")
+		deleteButton:SetContentAlignment(5)
+		deleteButton:Dock(BOTTOM)
+		deleteButton:DockMargin(5, 5, 5, 5)
+		deleteButton.DoClick = function()
+			self.character = character
+			self:SetActiveSubpanel("delete")
+		end
+		deleteButton.Paint = function(self, w, h)
+			if !self:IsHovered() then
+				surface.SetDrawColor(50, 50, 50, 255)
+				surface.SetMaterial(menublack)
+				surface.DrawTexturedRect(0, 0, w, h)
+				
+				surface.SetDrawColor(color_white)
+			else
+				surface.SetDrawColor(20, 20, 20, 255)
+				surface.DrawRect(0, 0, w, h)
+				
+				surface.SetDrawColor(Color(100, 100, 100, 255))
+			end
+	
+			surface.DrawOutlinedRect(0, 0, w, h)
+		end
+
+		local loadButton = image:Add("ixMenuButton")
+		loadButton:SetText("Load")
+		loadButton:SetContentAlignment(5)
+		loadButton:Dock(BOTTOM)
+		loadButton:DockMargin(5, 5, 5, 0)
+		loadButton.DoClick = function()
+			self.character = character
+			self:SetMouseInputEnabled(false)
+			self:Slide("down", self.animationTime, function()
+				net.Start("ixCharacterChoose")
+					net.WriteUInt(self.character:GetID(), 32)
+				net.SendToServer()
+			end, true)
+		end
+		loadButton.Paint = function(self, w, h)
+			if !self:IsHovered() then
+				surface.SetDrawColor(50, 50, 50, 255)
+				surface.SetMaterial(menublack)
+				surface.DrawTexturedRect(0, 0, w, h)
+				
+				surface.SetDrawColor(color_white)
+			else
+				surface.SetDrawColor(20, 20, 20, 255)
+				surface.DrawRect(0, 0, w, h)
+				
+				surface.SetDrawColor(Color(100, 100, 100, 255))
+			end
+	
+			surface.DrawOutlinedRect(0, 0, w, h)
+		end
+	end
+
+	local back = self.panel:Add("ixMenuButton")
+	back:SetText("Return to Main Menu")
+	back:SetContentAlignment(5)
 	back:Dock(BOTTOM)
-	back:SetText("return")
-	back:SizeToContents()
 	back.DoClick = function()
 		self:SlideDown()
 		parent.mainPanel:Undim()
 	end
+	back.Paint = function(self, w, h)
+		if !self:IsHovered() then
+			surface.SetDrawColor(50, 50, 50, 255)
+			surface.SetMaterial(menublack)
+			surface.DrawTexturedRect(0, 0, w, h)
+			
+			surface.SetDrawColor(color_white)
+		else
+			surface.SetDrawColor(20, 20, 20, 255)
+			surface.DrawRect(0, 0, w, h)
+			
+			surface.SetDrawColor(Color(100, 100, 100, 255))
+		end
 
-	self.characterList = controlList:Add("ixCharMenuButtonList")
-	self.characterList.buttons = {}
-	self.characterList:Dock(FILL)
-
-	-- right-hand side with carousel and buttons
-	local infoPanel = self.panel:Add("Panel")
-	infoPanel:Dock(FILL)
-
-	local infoButtons = infoPanel:Add("Panel")
-	infoButtons:Dock(BOTTOM)
-	infoButtons:SetTall(back:GetTall()) -- hmm...
-
-	local continueButton = infoButtons:Add("ixMenuButton")
-	continueButton:Dock(FILL)
-	continueButton:SetText("choose")
-	continueButton:SetContentAlignment(6)
-	continueButton:SizeToContents()
-	continueButton.DoClick = function()
-		self:SlideDown(self.animationTime, function()
-			net.Start("ixCharacterChoose")
-				net.WriteUInt(self.character:GetID(), 32)
-			net.SendToServer()
-		end, true)
+		surface.DrawOutlinedRect(0, 0, w, h)
 	end
-
-	local deleteButton = infoButtons:Add("ixMenuButton")
-	deleteButton:Dock(LEFT)
-	deleteButton:SetText("delete")
-	deleteButton:SetContentAlignment(5)
-	deleteButton:SetTextInset(0, 0)
-	deleteButton:SizeToContents()
-	deleteButton:SetTextColor(derma.GetColor("Error", deleteButton))
-	deleteButton.DoClick = function()
-		self:SetActiveSubpanel("delete")
-	end
-
-	self.carousel = infoPanel:Add("ixCharMenuCarousel")
-	self.carousel:Dock(FILL)
 
 	-- character deletion panel
 	self.delete = self:AddSubpanel("delete")
 	self.delete:SetTitle(nil)
 	self.delete.OnSetActive = function()
+	self.delete.avoidPadding = true
 		self.deleteModel:SetModel(self.character:GetModel())
+		if self.character:GetData("skin") then
+			self.deleteModel.Entity:SetSkin(self.character:GetData("skin"))
+		end
+
+		local bodygroups = self.character:GetData("groups", nil)
+
+		if (istable(bodygroups)) then
+			for k, v in pairs(bodygroups) do
+				if self.deleteModel.Entity then
+					self.deleteModel.Entity:SetBodygroup(k, v)
+				end
+			end
+		end
+
 		self:CreateAnimation(self.animationTime, {
 			index = 2,
 			target = {backgroundFraction = 0},
@@ -340,134 +246,160 @@ function PANEL:Init()
 	deleteInfo:SetSize(parent:GetWide() * 0.5, parent:GetTall())
 	deleteInfo:Dock(LEFT)
 
-	local deleteReturn = deleteInfo:Add("ixMenuButton")
-	deleteReturn:Dock(BOTTOM)
-	deleteReturn:SetText("no")
-	deleteReturn:SizeToContents()
-	deleteReturn.DoClick = function()
-		self:SetActiveSubpanel("main")
-	end
+	self.deleteModel = deleteInfo:Add("ixModelPanel")
+	self.deleteModel:Dock(FILL)
+	self.deleteModel:SetModel("models/error.mdl")
+	self.deleteModel:SetFOV(78)
+	self.deleteModel.PaintModel = self.deleteModel.Paint
 
-	local deleteConfirm = self.delete:Add("ixMenuButton")
-	deleteConfirm:Dock(BOTTOM)
-	deleteConfirm:SetText("yes")
-	deleteConfirm:SetContentAlignment(6)
-	deleteConfirm:SizeToContents()
-	deleteConfirm:SetTextColor(derma.GetColor("Error", deleteConfirm))
-	deleteConfirm.DoClick = function()
+	local deleteNag = self.delete:Add("Panel")
+	deleteNag:SetTall(parent:GetTall() * 0.6)
+	deleteNag:Dock(BOTTOM)
+
+	local deleteTitle = deleteNag:Add("ixLabel")
+	deleteTitle:SetFont("Font-Elements-ScreenScale14")
+	deleteTitle:SetText(string.upper("are you sure?"))
+	deleteTitle:SetTextColor(Color(200, 50, 50, 255))
+	deleteTitle:SetContentAlignment(4)
+	deleteTitle:SizeToContents()
+	deleteTitle:Dock(TOP)
+
+	local deleteText = deleteNag:Add("ixLabel")
+	deleteText:SetFont("Font-Elements-ScreenScale10")
+	deleteText:SetText("This character will be permanently removed!")
+	deleteText:SetTextColor(color_white)
+	deleteText:SetContentAlignment(7)
+	deleteText:Dock(TOP)
+	deleteText:SizeToContents()
+
+	local yesnoPanel = deleteNag:Add("Panel")
+	yesnoPanel:Dock(TOP)
+	yesnoPanel:SetTall(ScreenScale(60 / 3))
+	yesnoPanel:DockMargin(0, margin, 0, 0)
+
+	local yes = yesnoPanel:Add("ixMenuButton")
+	yes:Dock(LEFT)
+	yes:SetWide(ScreenScale(60))
+	yes:DockMargin(0, 0, 5, 0)
+	yes:SetFont("Font-Elements-ScreenScale10")
+	yes:SetText(string.upper("yes"))
+	yes:SetContentAlignment(5)
+	yes.Paint = function(self, w, h) end
+	yes.DoClick = function()
+		self.CharacterCount = self.CharacterCount - 1
+
 		local id = self.character:GetID()
 
 		parent:ShowNotice(1, L("deleteComplete", self.character:GetName()))
-		self:Populate(id)
+
 		self:SetActiveSubpanel("main")
 
 		net.Start("ixCharacterDelete")
 			net.WriteUInt(id, 32)
 		net.SendToServer()
+
+		for k, v in pairs(self.characterPanel:GetChildren()) do
+			if v.id == id then
+				v:Remove()
+			end
+		end
+
+		if self.CharacterCount == 1 then
+			self.characterPanel:SetSize(charPanelW, charImageH)
+		else
+			self.characterPanel:SetSize((self.CharacterCount) * charPanelW + ((self.CharacterCount - 1) * margin), charImageH)
+		end
+
+		self.characterPanel:SetPos(0, 0)
+	end
+	yes.Paint = function(self, w, h)
+		if !self:IsHovered() then
+			surface.SetDrawColor(50, 50, 50, 255)
+			surface.SetMaterial(menublack)
+			surface.DrawTexturedRect(0, 0, w, h)
+			
+			surface.SetDrawColor(color_white)
+		else
+			surface.SetDrawColor(20, 20, 20, 255)
+			surface.DrawRect(0, 0, w, h)
+			
+			surface.SetDrawColor(Color(100, 100, 100, 255))
+		end
+
+		surface.DrawOutlinedRect(0, 0, w, h)
 	end
 
-	self.deleteModel = deleteInfo:Add("ixModelPanel")
-	self.deleteModel:Dock(FILL)
-	self.deleteModel:SetModel(errorModel)
-	self.deleteModel:SetFOV(modelFOV)
-	self.deleteModel.PaintModel = self.deleteModel.Paint
+	local no = yesnoPanel:Add("ixMenuButton")
+	no:Dock(LEFT)
+	no:SetWide(ScreenScale(60))
+	no:SetFont("Font-Elements-ScreenScale10")
+	no:SetText(string.upper("no"))
+	no:SetContentAlignment(5)
+	no.Paint = function(self, w, h) end
+	no.DoClick = function()
+		self:SetActiveSubpanel("main")
+	end
+	no.Paint = function(self, w, h)
+		if !self:IsHovered() then
+			surface.SetDrawColor(50, 50, 50, 255)
+			surface.SetMaterial(menublack)
+			surface.DrawTexturedRect(0, 0, w, h)
+			
+			surface.SetDrawColor(color_white)
+		else
+			surface.SetDrawColor(20, 20, 20, 255)
+			surface.DrawRect(0, 0, w, h)
+			
+			surface.SetDrawColor(Color(100, 100, 100, 255))
+		end
 
-	local deleteNag = self.delete:Add("Panel")
-	deleteNag:SetTall(parent:GetTall() * 0.5)
-	deleteNag:Dock(BOTTOM)
-
-	local deleteTitle = deleteNag:Add("DLabel")
-	deleteTitle:SetFont("ixTitleFont")
-	deleteTitle:SetText(L("areYouSure"):utf8upper())
-	deleteTitle:SetTextColor(ix.config.Get("color"))
-	deleteTitle:SizeToContents()
-	deleteTitle:Dock(TOP)
-
-	local deleteText = deleteNag:Add("DLabel")
-	deleteText:SetFont("ixMenuButtonFont")
-	deleteText:SetText(L("deleteConfirm"))
-	deleteText:SetTextColor(color_white)
-	deleteText:SetContentAlignment(7)
-	deleteText:Dock(FILL)
+		surface.DrawOutlinedRect(0, 0, w, h)
+	end
 
 	-- finalize setup
 	self:SetActiveSubpanel("main", 0)
 end
 
 function PANEL:OnCharacterDeleted(character)
+	local parent = self:GetParent()
+	local bHasCharacter = #ix.characters > 0
+
 	if (self.bActive and #ix.characters == 0) then
 		self:SlideDown()
-	end
-end
+		parent.mainPanel.loadButton:SetDisabled(true)
+		parent.mainPanel.loadButton:SetTextColor(Color(90, 90, 90, 255))
 
-function PANEL:Populate(ignoreID)
-	self.characterList:Clear()
-	self.characterList.buttons = {}
+		parent.mainPanel.loadButton.Paint = function( self, w, h )
+			surface.SetDrawColor(Color(0, 0, 0, 0));
+			surface.DrawRect(0,0, w, h);
 
-	local bSelected
-
-	-- loop backwards to preserve order since we're docking to the bottom
-	for i = 1, #ix.characters do
-		local id = ix.characters[i]
-		local character = ix.char.loaded[id]
-
-		if (!character or character:GetID() == ignoreID) then
-			continue
+			if self:IsHovered() and (bHasCharacter) then
+				draw.RoundedBox( 10, 0, 0, self:GetWide(), self:GetTall(), Color(78, 79, 100, 240) )
+			end
 		end
 
-		local index = character:GetFaction()
-		local faction = ix.faction.indices[index]
-		local color = faction and faction.color or color_white
-
-		local button = self.characterList:Add("ixMenuSelectionButton")
-		button:SetBackgroundColor(color)
-		button:SetText(character:GetName())
-		button:SizeToContents()
-		button:SetButtonList(self.characterList.buttons)
-		button.character = character
-		button.OnSelected = function(panel)
-			self:OnCharacterButtonSelected(panel)
+		parent.mainPanel.loadButton.OnCursorEntered = function()
+			if (!bHasCharacter) then
+				parent.mainPanel.loadButton:SetTextColor(Color(90, 90, 90, 255))
+				return
+			end
 		end
 
-		-- select currently loaded character if available
-		local localCharacter = LocalPlayer().GetCharacter and LocalPlayer():GetCharacter()
-
-		if (localCharacter and character:GetID() == localCharacter:GetID()) then
-			button:SetSelected(true)
-			self.characterList:ScrollToChild(button)
-
-			bSelected = true
+		parent.mainPanel.loadButton.OnCursorExited = function()
+			if (!bHasCharacter) then
+				parent.mainPanel.loadButton:SetTextColor(Color(90, 90, 90, 255))
+				return
+			end
 		end
 	end
-
-	if (!bSelected) then
-		local buttons = self.characterList.buttons
-
-		if (#buttons > 0) then
-			local button = buttons[#buttons]
-
-			button:SetSelected(true)
-			self.characterList:ScrollToChild(button)
-		else
-			self.character = nil
-		end
-	end
-
-	self.characterList:SizeToContents()
 end
 
 function PANEL:OnSlideUp()
 	self.bActive = true
-	self:Populate()
 end
 
 function PANEL:OnSlideDown()
 	self.bActive = false
-end
-
-function PANEL:OnCharacterButtonSelected(panel)
-	self.carousel:SetActiveCharacter(panel.character)
-	self.character = panel.character
 end
 
 function PANEL:Paint(width, height)
