@@ -13,11 +13,9 @@ ix.util.IncludeDir("meta")
 
 // Schema config
 
-// Maximize the animation rate, for example running and walking.
-ANIM_MAX_RATE = 1.0
-
 local config = {
     allowVoice = true,
+    animMaxRate = 1,
     areaTickTime = 0,
     color = Color(255, 255, 255),
     communityURL = "https://discord.gg/nUBpfxDPee",
