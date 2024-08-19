@@ -1,33 +1,36 @@
--- Schema info
+// Schema info
 
 Schema.name = "Project Paragon"
 Schema.description = ""
 Schema.author = ""
 
--- Schema includes
+// Schema includes
 
 ix.util.Include("cl_schema.lua")
 ix.util.Include("sv_schema.lua")
 ix.util.IncludeDir("hooks")
 ix.util.IncludeDir("meta")
 
--- Schema config
+// Schema config
+
+// Maximize the animation rate, for example running and walking.
+ANIM_MAX_RATE = 1.0
 
 local config = {
+    allowVoice = true,
+    areaTickTime = 0,
     color = Color(255, 255, 255),
-    walkSpeed = 80,
+    communityURL = "https://discord.gg/nUBpfxDPee",
+    intro = false,
+    inventoryHeight = 2,
+    inventoryWidth = 4,
+    music = "projectparagon/ui/paragon_menu.mp3",
     runSpeed = 180,
     staminaDrain = 4,
     staminaRegeneration = 2,
-    music = "projectparagon/ui/paragon_menu.mp3",
-    vignette = false,
-    communityURL = "https://discord.gg/nUBpfxDPee",
-    intro = false,
     thirdperson = false,
-    allowVoice = true,
-    inventoryHeight = 2,
-    inventoryWidth = 4,
-    areaTickTime = 0
+    vignette = false,
+    walkSpeed = 80
 }
 
 for k, v in pairs(config) do
@@ -35,7 +38,7 @@ for k, v in pairs(config) do
     ix.config.ForceSet(k, v)
 end
 
--- Schema playermodels
+// Schema playermodels
 player_manager.AddValidModel("Passive", "models/cpthazama/scp/dclass.mdl")
 player_manager.AddValidModel("Passive", "models/cpthazama/scp/scientist.mdl")
 player_manager.AddValidModel("Passive", "models/cpthazama/scp/janitor.mdl")
@@ -50,12 +53,12 @@ player_manager.AddValidHands("Combatant", "models/projectparagon/scp_combatant_v
 player_manager.AddValidModel("SCP-049", "models/cpthazama/scp/049.mdl")
 player_manager.AddValidHands("SCP-049", "models/scp049upgrade/weapons/c_arms_scp049_upgrade.mdl", 0, "00000000")
 
--- Schema flags
+// Schema flags
 
 ix.flag.Add("S", "Access to the spawn menu.")
 ix.flag.Add("s", "Access to the context menu.")
 
--- Here is where all shared functions should go.
+// Here is where all shared functions should go.
 
 function Schema:ZeroNumber(number, length)
     local amount = math.max(0, length - string.len(number))
