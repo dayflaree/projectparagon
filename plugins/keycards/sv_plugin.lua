@@ -41,12 +41,21 @@ function PLUGIN:PlayerUse(ply, ent)
             ix.chat.Send(ply, "me", self.messagesAllowed[math.random(1, #self.messagesAllowed)])
             ply.ixNextUseMe = CurTime() + 5
         end
-    else
+    elseif ( ply:GetAccessLevel() == 0 ) then
+        debugoverlay.Text(trace.HitPos, "Access Denied, No Keycard", 1)
+
+        if ( ply.ixNextUseMe < CurTime() and self.messagesDenied and #self.messagesDenied > 0 ) then
+            ix.chat.Send(ply, "me", self.messagesDenied[math.random(1, #self.messagesDenied)])
+            ply.ixNextUseMe = CurTime() + 5
+        end
+
+        return false
+    elseif ( ply:GetAccessLevel() < level ) then
         EmitSound("scp/sfx/interact/keycarduse2.wav", trace.HitPos, ply:EntIndex())
         debugoverlay.Text(trace.HitPos, "Access Denied", 1)
     
-        if ( ply.ixNextUseMe < CurTime() and self.messagesDenied and #self.messagesDenied > 0 ) then
-            ix.chat.Send(ply, "me", self.messagesDenied[math.random(1, #self.messagesDenied)])
+        if ( ply.ixNextUseMe < CurTime() and self.messagesDeniedCard and #self.messagesDeniedCard > 0 ) then
+            ix.chat.Send(ply, "me", self.messagesDeniedCard[math.random(1, #self.messagesDeniedCard)])
             ply.ixNextUseMe = CurTime() + 5
         end
 
