@@ -1,5 +1,10 @@
 -- Here is where all serverside hooks should go.
 
+function Schema:PlayerSpawn(client)
+	client:SetCanZoom()
+        return false
+end
+
 function Schema:PostPlayerSay(client, chatType, message, anonymous)
     if ( chatType == "ic" ) then
         ix.log.Add(client, "chat", chatType and chatType:utf8upper() or "??", text or message)
