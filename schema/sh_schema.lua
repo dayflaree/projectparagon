@@ -41,11 +41,13 @@ player_manager.AddValidModel("Passive", "models/painkiller_76/sf2/classd/classd.
 player_manager.AddValidModel("Passive", "models/cpthazama/scp/janitor.mdl")
 player_manager.AddValidModel("Passive", "models/painkiller_76/sf2/clerk/clerk.mdl")
 player_manager.AddValidHands("Passive", "models/duck/player/d_class_player_vm.mdl", 0, "00000000")
+
 player_manager.AddValidModel("Combatant", "models/cpthazama/scp/guard.mdl")
 player_manager.AddValidModel("Combatant", "models/cpthazama/scp/ntf.mdl")
 player_manager.AddValidModel("Combatant", "models/cpthazama/scp/chaos.mdl")
 player_manager.AddValidModel("Combatant", "models/cpthazama/scp/sneguard.mdl")
 player_manager.AddValidHands("Combatant", "models/projectparagon/scp_combatant_vm.mdl", 0, "00000000")
+
 player_manager.AddValidModel("SCP-049", "models/cpthazama/scp/049.mdl")
 player_manager.AddValidHands("SCP-049", "models/scp049upgrade/weapons/c_arms_scp049_upgrade.mdl", 0, "00000000")
 
