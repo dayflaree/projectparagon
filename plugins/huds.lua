@@ -15,7 +15,7 @@ function PLUGIN:DrawGenHud(ply)
 end
 
 function PLUGIN:DrawNTFHud(ply, gall)
-
+    draw.DrawText("hi", "DermaDefault", 10, 10)
 end
 
 function PLUGIN:HUDPaint()
@@ -23,10 +23,11 @@ function PLUGIN:HUDPaint()
     local char = ply:GetCharacter()
 
     if not ( IsValid(ply) and char ) then return end
+    
     for i, v in ipairs(player.GetAll())
         self:DrawGenHud(ply)
 
-        if ply:Team() == FACTION_E11 then
+        if ply:IsE11() then
             self:DrawNTFHud(ply, v)
         end
     end
