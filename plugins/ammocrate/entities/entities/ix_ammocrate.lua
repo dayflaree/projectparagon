@@ -6,7 +6,7 @@ ENT.Base = "base_gmodentity"
 ENT.Type = "anim"
 ENT.PrintName = "Ammo Crate"
 ENT.Author = "Riggs.mackay"
-ENT.Category = "Desolation. Helix"
+ENT.Category = "Project Paragon"
 
 ENT.AutomaticFrameAdvance = true
 ENT.Spawnable = true
