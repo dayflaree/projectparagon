@@ -1,3 +1,5 @@
+local PLUGIN = PLUGIN
+
 PLUGIN.name = "Heads Up Displays"
 PLUGIN.description = "Contains all heads up displays."
 PLUGIN.author = "pkz.0z"
@@ -24,8 +26,8 @@ function PLUGIN:HUDPaint()
 
     if not ( IsValid(ply) and char ) then return end
     
-    for i, v in ipairs(player.GetAll())
-        self:DrawGenHud(ply)
+    for i, v in ipairs(player.GetAll()) do
+        PLUGIN:DrawGenHud(ply)
 
         if ply:IsE11() then
             self:DrawNTFHud(ply, v)
