@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 ENT.Type = "anim"
 ENT.PrintName = "Intercom"
-ENT.Category = "SCPRP"
+ENT.Category = "Project Paragon"
 ENT.Spawnable = true
 ENT.AdminOnly = true
 
