@@ -18,27 +18,6 @@ FACTION.models = {
 
 function FACTION:OnCharacterCreated(ply, char)
     char:SetName("O5-"..Schema:ZeroNumber(math.random(1, 12), 2).." "..char:GetName())
-
-end
-
-function FACTION:OnSpawn(ply)
-    local char = ply:GetCharacter()
-    char:SetClass(nil)
-end
-
-function FACTION:OnTransferred(char)
-    char:SetClass(nil)
-end
-
-function FACTION:OnSpawn(ply)
-    local inventory = ply:GetCharacter():GetInventory()
-    local item = inventory:HasItem("longrange")
-    local item = inventory:HasItem("key6")
-
-    if not ( item ) then
-        inventory:Add("longrange", 1, {["frequency"] = ix.config.Get("foundationFrequency")})
-        inventory:Add("key6", 1)
-    end
 end
 
 FACTION_O5COUNCIL = FACTION.index
