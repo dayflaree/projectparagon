@@ -8,4 +8,4 @@ FACTION.models = {
     "models/cpthazama/scp/scientist.mdl"
 }
 
-FACTION_RESEARCHER = FACTION.index
+FACTION_SCIENTIFIC = FACTION.index
