@@ -61,9 +61,9 @@ function PLUGIN:DrawNTFHud(ply, gall)
 
     local gap = 0
     for i, v in ipairs(player.GetAll()) do
-        if v:IsE11() then
+        if v:IsMTF() then
             for k, entity in ipairs(ents.GetAll()) do
-                if IsValid(entity) and entity:IsPlayer() and entity:IsE11() then
+                if IsValid(entity) and entity:IsPlayer() and entity:IsMTF() then
                     local color = self:ReturnHPC(entity:Health())
 
                     local x = (ScrW() - 320 * PLUGIN.HUDScale)
@@ -98,7 +98,7 @@ function PLUGIN:HUDPaint()
 
     PLUGIN:DrawGenHud(ply)
 
-    if ply:IsE11() then
+    if ply:IsMTF() then
         self:DrawNTFHud(ply, v)
     end
 end
