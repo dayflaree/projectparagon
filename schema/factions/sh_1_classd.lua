@@ -9,16 +9,4 @@ function FACTION:OnCharacterCreated(ply, char)
 
 end
 
-function FACTION:OnSpawn(ply)
-    local char = ply:GetCharacter()
-    char:SetClass(nil)
-    ply:SetHealth(100)
-    ply:SetArmor(0)
-    
-end
-
-function FACTION:OnTransferred(char)
-    char:SetClass(nil)
-end
-
 FACTION_CLASSD = FACTION.index
