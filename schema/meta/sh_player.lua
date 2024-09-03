@@ -1,6 +1,45 @@
 local PLAYER = FindMetaTable("Player")
 
--- move it if u must. couldnt find anywhere else i could put it.
+function PLAYER:IsClassD()
+	return self:Team() == FACTION_CLASSD
+end
+
+function PLAYER:IsMaintenance()
+	return self:Team() == FACTION_MAINTENANCE
+end
+
+function PLAYER:IsMedical()
+	return self:Team() == FACTION_MEDICAL
+end
+
+function PLAYER:IsScientific()
+	return self:Team() == FACTION_SCIENTIFIC
+end
+
+function PLAYER:IsSecurity()
+	return self:Team() == FACTION_SECURITY
+end
+
 function PLAYER:IsMTF()
 	return self:Team() == FACTION_MTF
+end
+
+function PLAYER:IsSiteDirector()
+	return self:Team() == FACTION_SITEDIRECTOR
+end
+
+function PLAYER:IsEthics()
+	return self:Team() == FACTION_ETHICS
+end
+
+function PLAYER:IsO5()
+	return self:Team() == FACTION_O5
+end
+
+function PLAYER:IsSCP()
+	return self:Team() == FACTION_SCP
+end
+
+function PLAYER:IsCI()
+	return self:Team() == FACTION_CI
 end
