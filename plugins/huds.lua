@@ -72,7 +72,7 @@ function PLUGIN:DrawNTFHud(ply, gall)
                     local height = 30 * PLUGIN.HUDScale
 
                     surface.SetDrawColor(color)
-                    surface.SetMaterial(Material("Temp/scoreboard.png"))
+                    surface.SetMaterial(Material("materials/90/projectparagon/ui/hud/scoreboard.png"))
                     surface.DrawTexturedRect(x, y, width, height)
 
                     local textHeight = draw.GetFontHeight("NTFHudFont")
