@@ -19,4 +19,4 @@ function FACTION:OnSpawn(ply)
     ply:SetArmor(250)
 end
 
-FACTION_E11 = FACTION.index
+FACTION_MTF = FACTION.index
