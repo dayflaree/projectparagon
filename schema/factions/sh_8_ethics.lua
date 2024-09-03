@@ -15,21 +15,4 @@ FACTION.models = {
 
 }
 
-function FACTION:OnCharacterCreated(ply, char)
-    char:SetClass(nil)
-end
-
-function FACTION:OnTransferred(char)
-    char:SetClass(nil)
-end
-
-function FACTION:OnSpawn(ply)
-    local inventory = ply:GetCharacter():GetInventory()
-    local item = inventory:HasItem("longrange")
-
-    if not ( item ) then
-        inventory:Add("longrange", 1, {["frequency"] = ix.config.Get("foundationFrequency")})
-    end
-end
-
 FACTION_ETHICS = FACTION.index
