@@ -1,8 +1,8 @@
 // Schema info
 
 Schema.name = "Project Paragon"
-Schema.description = ""
-Schema.author = ""
+Schema.description = "SCP: Containment Breach Roleplay"
+Schema.author = "90"
 
 // Schema includes
 
