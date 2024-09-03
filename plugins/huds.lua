@@ -4,15 +4,17 @@ PLUGIN.name = "Heads Up Displays"
 PLUGIN.description = "Contains all heads up displays."
 PLUGIN.author = "pkz.0z"
 
+PLUGIN.HUDScale = 0.8
+
 -- This might be a lil bit messy but I'm adding more shit in to it. Any code that looks a lil bit silly I will fix up!!! Do not touch unless I've made a retarded error 
 -- edit: raaaa i can already see this shits ordered bad but fuck it idk how to reorder it
-
+-- edit 2: should basically be working now.
 
 if not ( CLIENT ) then return end
 
 surface.CreateFont("NTFHudFont", {
     font = "Arial",
-    size = 25,
+    size = 22 * PLUGIN.HUDScale,
     extended = true,
     shadow = true,
     weight = 100
@@ -44,7 +46,7 @@ function PLUGIN:ReturnHPC(hp)
         r, g, b = 0, 0, 0
     end
 
-    return Color(r, g, b)
+    return Color(r, g, b, 200)
 end
 
 function PLUGIN:ShouldHideBars()
@@ -52,36 +54,41 @@ function PLUGIN:ShouldHideBars()
 end
 
 function PLUGIN:DrawGenHud(ply)
-
 end
 
 function PLUGIN:DrawNTFHud(ply, gall)
     if not ply:Alive() then return end
 
+    local gap = 0
     for i, v in ipairs(player.GetAll()) do
         if v:IsE11() then
-            local gap = 0
             for k, entity in ipairs(ents.GetAll()) do
                 if IsValid(entity) and entity:IsPlayer() and entity:IsE11() then
                     local color = self:ReturnHPC(entity:Health())
 
-                    local x = ScrW() - 285
-                    local y = 10 + gap
-                    local width = 280
-                    local height = 30
+                    local x = (ScrW() - 320 * PLUGIN.HUDScale)
+                    local y = (10 + gap) * PLUGIN.HUDScale
+                    local width = 310 * PLUGIN.HUDScale
+                    local height = 30 * PLUGIN.HUDScale
 
-                    surface.SetDrawColor(131, 131, 131, 66)
-                    surface.DrawRect(x, y, width, height)
-                    surface.DrawOutlinedRect(x, y, width, height, 1)
-                    draw.DrawText(entity:Nick(), "NTFHudFont", ScrW() - 15, y + 3, color, TEXT_ALIGN_RIGHT)
+                    surface.SetDrawColor(color)
+                    surface.SetMaterial(Material("Temp/scoreboard.png"))
+                    surface.DrawTexturedRect(x, y, width, height)
 
-                    gap = gap + 30
+                    local textHeight = draw.GetFontHeight("NTFHudFont")
+
+                    local textY = y + (height - textHeight) / 2
+
+                    draw.DrawText(entity:Nick(), "NTFHudFont", x + width / 2, textY, color_white, TEXT_ALIGN_CENTER)
+
+                    gap = gap + 32
                 end
             end
             break
         end
     end
 end
+
 
 function PLUGIN:HUDPaint()
     local ply = LocalPlayer()
