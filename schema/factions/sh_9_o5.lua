@@ -20,4 +20,4 @@ function FACTION:OnCharacterCreated(ply, char)
     char:SetName("O5-"..Schema:ZeroNumber(math.random(1, 12), 2).." "..char:GetName())
 end
 
-FACTION_O5COUNCIL = FACTION.index
+FACTION_O5 = FACTION.index
