@@ -38,22 +38,19 @@ function Schema:PlayerTick(ply)
     end
 end
 function Schema:PlayerSpray()
-    return true
+    return false
 end
 function Schema:PlayerSpawnRagdoll(ply)
     return ply:IsAdmin()
 end
-function Schema:PlayerSpawnEffect(ply)
+function Schema:PlayerSpawnSENT(ply)
     return ply:IsAdmin()
 end
-function Schema:PlayerSpawnSENT(ply)
-    return ply:IsSuperAdmin()
-end
 function Schema:PlayerSpawnSWEP(ply)
-    return ply:IsSuperAdmin()
+    return ply:IsAdmin()
 end
 function Schema:PlayerSpawnVehicle(ply)
-    return ply:IsSuperAdmin()
+    return ply:IsAdmin()
 end
 
 function Schema:PlayerCanHearPlayersVoice(listener, talker)
