@@ -15,7 +15,7 @@ function PANEL:Init()
 
 	-- main panel
 	self.panel = self:AddSubpanel("main")
-	self.panel:SetTitle("loadTitle")
+	self.panel:SetTitle("LOAD CHARACTER")
 	self.panel.OnSetActive = function()
 		self:CreateAnimation(self.animationTime, {
 			index = 2,

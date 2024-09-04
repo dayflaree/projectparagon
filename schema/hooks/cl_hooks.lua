@@ -34,27 +34,3 @@ function Schema:HUDPaintBackground()
     draw.DrawText(Schema.name.."", "Font-Elements-ScreenScale12", scrW / 2, ScreenScale(4), ColorAlpha(ix.config.Get("color"), 150), TEXT_ALIGN_CENTER)
     draw.DrawText("Everything you see may be subject to change!", "Font-Elements-Italic-ScreenScale8", scrW / 2, ScreenScale(14), ColorAlpha(color_white, 100), TEXT_ALIGN_CENTER)
 end
-
-local damageOverlay = ix.util.GetMaterial("helix/gui/vignette.png")
-local vignette1 = ix.util.GetMaterial("helix/gui/vignette.png")
-local vignette2 = ix.util.GetMaterial("helix/gui/vignette.png")
-
-function Schema:DrawPlayerScreenDamage(ply, damageFraction)
-    surface.SetDrawColor(255, 0, 0, math.Clamp(255 * damageFraction, 0, 255))
-    surface.SetMaterial(vignette2)
-    surface.DrawTexturedRect(0, 0, scrW, scrH)
-
-    surface.SetDrawColor(255, 0, 0, math.Clamp(255 * damageFraction, 0, 255))
-    surface.SetMaterial(damageOverlay)
-    surface.DrawTexturedRect(0, 0, scrW, scrH)
-end
-
-function Schema:DrawPlayerVignette()
-    surface.SetDrawColor(0, 0, 0, 150)
-    surface.SetMaterial(vignette1)
-    surface.DrawTexturedRect(0, 0, scrW, scrH)
-
-    surface.SetDrawColor(0, 0, 0, 255)
-    surface.SetMaterial(vignette2)
-    surface.DrawTexturedRect(0, 0, scrW, scrH)
-end

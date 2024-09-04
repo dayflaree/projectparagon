@@ -24,7 +24,7 @@ function PANEL:Init()
     self.label:SetFont("ixMediumLightFont")
     self.label:SetTextColor(color_white)
     self.label:SetExpensiveShadow(1, color_black)
-    self.label:SetText("Area")
+    self.label:SetText("")
 
     self.text = ""
     self.tickSound = "projectparagon/gamesounds/scpcb/ambient/tozone"..math.random(2, 3)..".ogg"
@@ -43,6 +43,7 @@ function PANEL:Init()
     self:PlayTickSound()
 end
 
+/*
 function PANEL:Show()
     self:CreateAnimation(0.5, {
         index = -1,
@@ -68,6 +69,7 @@ function PANEL:SetText(text)
     self.text = text
     self.character = 1
 end
+*/
 
 function PANEL:Think()
     local time = RealTime()
@@ -75,7 +77,7 @@ function PANEL:Think()
     if (time >= self.nextThink) then
         if (self.character < self.text:utf8len()) then
             self.character = self.character + 1
-            self.label:SetText(string.utf8sub(self.text, 1, self.character))
+--          self.label:SetText(string.utf8sub(self.text, 1, self.character))
 
             LocalPlayer():EmitSound(self.tickSound, 100)
         end

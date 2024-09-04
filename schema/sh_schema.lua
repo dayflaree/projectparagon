@@ -1,34 +1,40 @@
-// Schema info
+-- Schema info
 
 Schema.name = "Project Paragon"
 Schema.description = "SCP: Containment Breach Roleplay"
 Schema.author = "90"
 
-// Schema includes
+-- Schema includes
 
 ix.util.Include("cl_schema.lua")
 ix.util.Include("sv_schema.lua")
 ix.util.IncludeDir("hooks")
 ix.util.IncludeDir("meta")
 
-// Schema config
+-- Schema config
 
 local config = {
-    allowVoice = true,
-    animMaxRate = 1,
-    areaTickTime = 0,
     color = Color(255, 255, 255),
+    music = "projectparagon/ui/paragon_menu.mp3",
     communityURL = "https://discord.gg/nUBpfxDPee",
+    font = "Courier New",
+    genericFont = "Courier New",
     intro = false,
+    areaTickTime = 0,
+    allowVoice = true,
+    thirdperson = false,
+    vignette = false,
+    allowGlobalOOC = false,
+    chatColor = Color(255, 217, 67),
+    chatListenColor = Color(107, 193, 78),
+    maxCharacters = 4,
     inventoryHeight = 2,
     inventoryWidth = 4,
-    music = "projectparagon/ui/paragon_menu.mp3",
+    animMaxRate = 1,
+    walkSpeed = 80,
     runSpeed = 180,
     staminaDrain = 2.6,
     staminaRegeneration = 2,
-    thirdperson = false,
-    vignette = false,
-    walkSpeed = 80
 }
 
 for k, v in pairs(config) do
@@ -36,27 +42,25 @@ for k, v in pairs(config) do
     ix.config.ForceSet(k, v)
 end
 
-// Schema playermodels
-player_manager.AddValidModel("Passive", "models/painkiller_76/sf2/classd/classd.mdl")
-player_manager.AddValidModel("Passive", "models/cpthazama/scp/janitor.mdl")
-player_manager.AddValidModel("Passive", "models/painkiller_76/sf2/clerk/clerk.mdl")
-player_manager.AddValidHands("Passive", "models/duck/player/d_class_player_vm.mdl", 0, "00000000")
+-- Schema playermodels
 
-player_manager.AddValidModel("Combatant", "models/cpthazama/scp/guard.mdl")
+player_manager.AddValidModel("Passive", "models/projectparagon/classd/classd.mdl")
+player_manager.AddValidModel("Passive", "models/projectparagon/clerk/clerk.mdl")
+player_manager.AddValidHands("Passive", "models/projectparagon/classd/d_class_player_vm.mdl", 0, "00000000")
+player_manager.AddValidModel("Combatant", "models/projectparagon/guard/guard.mdl")
+player_manager.AddValidModel("Combatant", "models/projectparagon/guard2/guard2.mdl")
 player_manager.AddValidModel("Combatant", "models/cpthazama/scp/ntf.mdl")
-player_manager.AddValidModel("Combatant", "models/cpthazama/scp/chaos.mdl")
-player_manager.AddValidModel("Combatant", "models/cpthazama/scp/sneguard.mdl")
+player_manager.AddValidModel("Combatant", "models/projectparagon/chaos/chaos.mdl")
 player_manager.AddValidHands("Combatant", "models/projectparagon/scp_combatant_vm.mdl", 0, "00000000")
-
 player_manager.AddValidModel("SCP-049", "models/cpthazama/scp/049.mdl")
 player_manager.AddValidHands("SCP-049", "models/scp049upgrade/weapons/c_arms_scp049_upgrade.mdl", 0, "00000000")
 
-// Schema flags
+-- Schema flags
 
 ix.flag.Add("S", "Access to the spawn menu.")
 ix.flag.Add("s", "Access to the context menu.")
 
-// Here is where all shared functions should go.
+-- Here is where all shared functions should go.
 
 function Schema:ZeroNumber(number, length)
     local amount = math.max(0, length - string.len(number))

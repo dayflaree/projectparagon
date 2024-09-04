@@ -20,7 +20,7 @@ function PANEL:Init()
 
 	-- faction selection subpanel
 	self.factionPanel = self:AddSubpanel("faction", true)
-	self.factionPanel:SetTitle("chooseFaction")
+	self.factionPanel:SetTitle("NEW CHARACTER")
 	self.factionPanel.OnSetActive = function()
 		-- if we only have one faction, we are always selecting that one so we can skip to the description section
 		if (#self.factionButtons == 1) then
@@ -67,7 +67,7 @@ function PANEL:Init()
 
 	-- character customization subpanel
 	self.description = self:AddSubpanel("description")
-	self.description:SetTitle("chooseDescription")
+	self.description:SetTitle("NEW CHARACTER")
 
 	local descriptionModelList = self.description:Add("Panel")
 	descriptionModelList:Dock(RIGHT)
@@ -117,6 +117,7 @@ function PANEL:Init()
 	-- attributes subpanel
 	self.attributes = self:AddSubpanel("attributes")
 	self.attributes:SetTitle("chooseSkills")
+	self.attributes:SetVisible(false)
 
 	local attributesModelList = self.attributes:Add("Panel")
 	attributesModelList:Dock(LEFT)
@@ -140,6 +141,7 @@ function PANEL:Init()
 	self.attributesPanel = self.attributes:Add("Panel")
 	self.attributesPanel:SetWide(halfWidth + padding * 2)
 	self.attributesPanel:Dock(RIGHT)
+
 
 	local create = self.attributesPanel:Add("ixMenuButton")
 	create:SetText("finish")
