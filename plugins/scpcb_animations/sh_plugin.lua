@@ -8,6 +8,9 @@ PLUGIN.sequences = {
     [ACT_SIGNAL_HALT] = "gesture_hold"
 }
 
+ix.anim.SetModelClass("models/scprp/scp131a2.mdl", "player")
+ix.anim.SetModelClass("models/scprp/scp131b2.mdl", "player")
+
 function PLUGIN:PlayerShouldTaunt(ply, act)
     local sequence = self.sequences[act]
     if ( !sequence ) then return end
