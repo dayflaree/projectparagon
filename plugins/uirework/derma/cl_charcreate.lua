@@ -117,7 +117,6 @@ function PANEL:Init()
 	-- attributes subpanel
 	self.attributes = self:AddSubpanel("attributes")
 	self.attributes:SetTitle("chooseSkills")
-	self.attributes:SetVisible(false)
 
 	local attributesModelList = self.attributes:Add("Panel")
 	attributesModelList:Dock(LEFT)
