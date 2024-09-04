@@ -66,3 +66,11 @@ function Schema:PlayerCanHearPlayersVoice(listener, talker)
 		end
 	end
 end
+
+function Schema:GetPlayerDeathSound(client)
+    return end
+end
+
+function Schema:GetPlayerPainSound(client)
+    return end
+end
