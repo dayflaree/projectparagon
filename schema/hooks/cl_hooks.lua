@@ -31,21 +31,6 @@ function Schema:HUDPaintBackground()
     if ( IsValid(ix.gui.characterMenu) and not ix.gui.characterMenu:IsClosing() ) then return end
     if not ( IsValid(ply) and char ) then return end
 
-    if ( ply:Alive() ) then
-        local maxHealth = ply:GetMaxHealth()
-        local health = ply:Health()
-        
-        if ( health < maxHealth ) then
-            self:DrawPlayerScreenDamage(ply, 1 - ((1 / maxHealth) * health))
-        end
-    else
-        return
-    end
-    
-    if ( ix.config.Get("vignette", true) ) then
-        self:DrawPlayerVignette()
-    end
-
     draw.DrawText(Schema.name.."", "Font-Elements-ScreenScale12", scrW / 2, ScreenScale(4), ColorAlpha(ix.config.Get("color"), 150), TEXT_ALIGN_CENTER)
     draw.DrawText("Everything you see may be subject to change!", "Font-Elements-Italic-ScreenScale8", scrW / 2, ScreenScale(14), ColorAlpha(color_white, 100), TEXT_ALIGN_CENTER)
 end
