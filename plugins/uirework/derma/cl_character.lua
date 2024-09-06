@@ -122,10 +122,6 @@ function PANEL:Init()
 
 	self.bUsingCharacter = LocalPlayer().GetCharacter and LocalPlayer():GetCharacter()
 	self:DockPadding(padding, padding, padding, padding)
-	
-	if not self.bUsingCharacter then 
-		surface.PlaySound("projectparagon/gamesounds/scpunity/music/loading_complete_music.wav")
-	end
 
 	-- button list
 	self.mainButtonList = self:Add("ixCharMenuButtonList")

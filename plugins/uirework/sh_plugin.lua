@@ -65,6 +65,17 @@ if ( CLIENT ) then
         MsgC(Color(0, 255, 0), "Fonts Loaded.\n")
     end
 
+    function PLUGIN:OnCharacterMenuCreated(panel)
+        sound.PlayFile("sound/projectparagon/gamesounds/scpunity/music/loading_complete_music.wav", "noplay", function(channel, errorID, errorName)
+            if (errorID) then
+                MsgC(Color(255, 0, 0), "[Helix] Failed to play sound \""..errorName.."\".\n")
+            else
+                channel:SetVolume(1)
+                channel:Play()
+            end
+        end)
+    end
+
     concommand.Add("ix_loadfonts", function()
         MsgC(ix.config.Get("color"), "Loading Fonts...\n")
 
