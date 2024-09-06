@@ -57,35 +57,30 @@ function PLUGIN:DrawGenHud(ply)
 end
 
 function PLUGIN:DrawNTFHud(ply, gall)
-    if not ply:Alive() then return end
+    if !ply:Alive() then return end
 
     local gap = 0
-    for i, v in ipairs(player.GetAll()) do
-        if v:IsMTF() then
-            for k, entity in ipairs(ents.GetAll()) do
-                if IsValid(entity) and entity:IsPlayer() and entity:IsMTF() then
-                    local color = self:ReturnHPC(entity:Health())
+    for i, v in player.Iterator() do
+        if !v:IsMTF() then continue end
 
-                    local x = (ScrW() - 320 * PLUGIN.HUDScale)
-                    local y = (10 + gap) * PLUGIN.HUDScale
-                    local width = 310 * PLUGIN.HUDScale
-                    local height = 30 * PLUGIN.HUDScale
+        local color = self:ReturnHPC(entity:Health())
 
-                    surface.SetDrawColor(color)
-                    surface.SetMaterial(Material("90/projectparagon/ui/player/hud/scoreboard.png"))
-                    surface.DrawTexturedRect(x, y, width, height)
+        local x = (ScrW() - 320 * PLUGIN.HUDScale)
+        local y = (10 + gap) * PLUGIN.HUDScale
+        local width = 310 * PLUGIN.HUDScale
+        local height = 30 * PLUGIN.HUDScale
 
-                    local textHeight = draw.GetFontHeight("NTFHudFont")
+        surface.SetDrawColor(color)
+        surface.SetMaterial(Material("90/projectparagon/ui/player/hud/scoreboard.png"))
+        surface.DrawTexturedRect(x, y, width, height)
 
-                    local textY = y + (height - textHeight) / 2
+        local textHeight = draw.GetFontHeight("NTFHudFont")
 
-                    draw.DrawText(entity:Nick(), "NTFHudFont", x + width / 2, textY, color_white, TEXT_ALIGN_CENTER)
+        local textY = y + (height - textHeight) / 2
 
-                    gap = gap + 32
-                end
-            end
-            break
-        end
+        draw.DrawText(entity:Nick(), "NTFHudFont", x + width / 2, textY, color_white, TEXT_ALIGN_CENTER)
+
+        gap = gap + 32
     end
 end
 
