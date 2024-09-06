@@ -2,7 +2,7 @@ local PLUGIN = PLUGIN
 
 PLUGIN.name = "Display Chat Messages"
 PLUGIN.description = "Displays what other characters saying above their heads (toggleable)."
-PLUGIN.author = "Reece™"
+PLUGIN.author = "Riggs"
 
 ix.option.Add("chatDisplayEnabled", ix.type.bool, true, {
 	category = "Chat Display"

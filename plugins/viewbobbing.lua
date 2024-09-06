@@ -2,7 +2,7 @@ local PLUGIN = PLUGIN
 
 PLUGIN.name = "View Bobbing"
 PLUGIN.description = ""
-PLUGIN.author = "Reece™"
+PLUGIN.author = "Riggs"
 
 ix.config.Add("viewBobbing", true, "Wether or not view bobbing should be enabled for everyone.", nil, {
     category = "Appearance",

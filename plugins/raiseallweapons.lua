@@ -2,7 +2,7 @@ local PLUGIN = PLUGIN
 
 PLUGIN.name = "Raise All Weapons"
 PLUGIN.description = ""
-PLUGIN.author = "Reece™"
+PLUGIN.author = "Riggs"
 
 PLUGIN.bypass = {
     ["ix_hands"] = true,

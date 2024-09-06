@@ -2,7 +2,7 @@ local PLUGIN = PLUGIN
 
 PLUGIN.name = "Intro Music"
 PLUGIN.description = "Plays music on character load."
-PLUGIN.author = "Reece™"
+PLUGIN.author = "Riggs"
 PLUGIN.schema = "SCPRP"
 
 PLUGIN.introMusic = {
