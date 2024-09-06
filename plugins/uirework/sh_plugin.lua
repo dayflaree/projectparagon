@@ -2,7 +2,7 @@ local PLUGIN = PLUGIN
 
 PLUGIN.name = "UI Rework"
 PLUGIN.description = "Reworks parts of the UI from the Helix Framework to transform it into a SCP:CB Style."
-PLUGIN.author = "Reece"
+PLUGIN.author = "Riggs"
 
 if ( CLIENT ) then
     PLUGIN.font = "Courier New"
