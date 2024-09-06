@@ -63,7 +63,7 @@ function PLUGIN:DrawNTFHud(ply, gall)
     for i, v in player.Iterator() do
         if !v:IsMTF() then continue end
 
-        local color = self:ReturnHPC(entity:Health())
+        local color = self:ReturnHPC(v:Health())
 
         local x = (ScrW() - 320 * PLUGIN.HUDScale)
         local y = (10 + gap) * PLUGIN.HUDScale
@@ -78,7 +78,7 @@ function PLUGIN:DrawNTFHud(ply, gall)
 
         local textY = y + (height - textHeight) / 2
 
-        draw.DrawText(entity:Nick(), "NTFHudFont", x + width / 2, textY, color_white, TEXT_ALIGN_CENTER)
+        draw.DrawText(v:Nick(), "NTFHudFont", x + width / 2, textY, color_white, TEXT_ALIGN_CENTER)
 
         gap = gap + 32
     end
