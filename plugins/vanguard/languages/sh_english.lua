@@ -48,6 +48,8 @@ LANGUAGE["vanguard_tools"] = "Tools"
 LANGUAGE["vanguard_unrestrict"] = "Unrestrict"
 LANGUAGE["vanguard_unrestrict_all"] = "Unrestrict All"
 LANGUAGE["vanguard_unrestricted"] = "Unrestricted"
+LANGUAGE["vanguard_unwhitelist_all"] = "Unwhitelist All"
+LANGUAGE["vanguard_whitelist_all"] = "Whitelist All"
 
 // credits
 LANGUAGE["vanguard_credits"] = "Credits"

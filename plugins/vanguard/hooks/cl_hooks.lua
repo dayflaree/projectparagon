@@ -184,6 +184,30 @@ function PLUGIN:CreateVanguardMenuButtons(tabs)
     if ( CAMI.PlayerHasAccess(ply, "Helix - Vanguard Usergroups - View", nil) ) then
         AddTab(tabs, "vanguard_usergroups", "ixVanguardUsergroups")
     end
+    
+    if ( CAMI.PlayerHasAccess(LocalPlayer(), "Helix - Manage Config", nil) ) then
+        tabs["config"] = {
+            Create = function(info, container)
+                container.panel = container:Add("ixConfigManager")
+            end,
+
+            OnSelected = function(info, container)
+                container.panel.searchEntry:RequestFocus()
+            end,
+
+            Sections = {
+                plugins = {
+                    Create = function(info, container)
+                        ix.gui.pluginManager = container:Add("ixPluginManager")
+                    end,
+
+                    OnSelected = function(info, container)
+                        ix.gui.pluginManager.searchEntry:RequestFocus()
+                    end
+                }
+            }
+        }
+    end
 end
 
 function PLUGIN:PopulateHelpMenu(tabs)
@@ -295,102 +319,134 @@ function PLUGIN:PopulateScoreboardPlayerMenu(target, menu)
     menu:AddSpacer()
 
     // Whitelist factions
-    local factions = {}
+    local options = {}
     for k, v in SortedPairsByMemberValue(ix.faction.indices, "sortOrder") do
         if ( v.isDefault ) then continue end
         if ( target:HasWhitelist(v.index) ) then continue end
 
-        factions[v.name] = function()
+        options[L(v.name)] = function()
             RunConsoleCommand("ix", "PlyWhitelist", id, v.uniqueID)
         end
     end
 
-    self:AddMenuOptions(menu, "Whitelist Faction", "icon16/group_add.png", factions)
+    options[L("vanguard_whitelist_all")] = function()
+        RunConsoleCommand("ix", "PlyWhitelistAll", id)
+    end
+
+    self:AddMenuOptions(menu, "Whitelist Faction", "icon16/group_add.png", options)
 
     // Unwhitelist factions
-    factions = {}
+    options = {}
     for k, v in SortedPairsByMemberValue(ix.faction.indices, "sortOrder") do
         if ( v.isDefault ) then continue end
         if ( !target:HasWhitelist(v.index) ) then continue end
 
-        factions[v.name] = function()
+        options[L(v.name)] = function()
             RunConsoleCommand("ix", "PlyUnwhitelist", id, v.uniqueID)
         end
     end
 
-    self:AddMenuOptions(menu, "Unwhitelist Faction", "icon16/group_delete.png", factions)
+    options[L("vanguard_unwhitelist_all")] = function()
+        RunConsoleCommand("ix", "PlyUnwhitelistAll", id)
+    end
+
+    self:AddMenuOptions(menu, "Unwhitelist Faction", "icon16/group_delete.png", options)
 
     // Transfer factions
-    factions = {}
+    options = {}
     for k, v in SortedPairsByMemberValue(ix.faction.indices, "sortOrder") do
         if ( !target:HasWhitelist(v.index) ) then continue end
         if ( !target:GetCharacter() ) then continue end
         if ( target:GetCharacter():GetFaction() == v.index ) then continue end
 
-        factions[v.name] = function()
+        options[L(v.name)] = function()
             RunConsoleCommand("ix", "PlyTransfer", id, v.uniqueID)
         end
     end
 
-    self:AddMenuOptions(menu, "Transfer Faction", "icon16/group_go.png", factions)
+    self:AddMenuOptions(menu, "Transfer Faction", "icon16/group_go.png", options)
 
     menu:AddSpacer()
 
     // Whitelist classes
-    if ( target.HasClassWhitelist ) then
-        local classes = {}
-        for k, v in SortedPairsByMemberValue(ix.class.list, "sortOrder") do
-            if ( target:HasClassWhitelist(v.index) ) then continue end
+    options = {}
+    for k, v in SortedPairsByMemberValue(ix.class.list, "sortOrder") do
+        if ( target:HasClassWhitelist(v.index) ) then continue end
 
-            classes[v.name] = function()
-                RunConsoleCommand("ix", "PlyClassWhitelist", id, v.uniqueID)
-            end
+        options[L(v.name)] = function()
+            RunConsoleCommand("ix", "PlyClassWhitelist", id, v.uniqueID)
         end
-
-        self:AddMenuOptions(menu, "Whitelist Class", "icon16/user_add.png", classes)
-
-        // Unwhitelist classes
-        classes = {}
-        for k, v in SortedPairsByMemberValue(ix.class.list, "sortOrder") do
-            if ( !target:HasClassWhitelist(v.index) ) then continue end
-
-            classes[v.name] = function()
-                RunConsoleCommand("ix", "PlyUnClassWhitelist", id, v.uniqueID)
-            end
-        end
-
-        self:AddMenuOptions(menu, "Unwhitelist Class", "icon16/user_delete.png", classes)
-
-        menu:AddSpacer()
     end
+
+    self:AddMenuOptions(menu, "Whitelist Class", "icon16/user_add.png", options)
+
+    // Unwhitelist classes
+    options = {}
+    for k, v in SortedPairsByMemberValue(ix.class.list, "sortOrder") do
+        if ( !target:HasClassWhitelist(v.index) ) then continue end
+
+        options[L(v.name)] = function()
+            RunConsoleCommand("ix", "PlyUnClassWhitelist", id, v.uniqueID)
+        end
+    end
+
+    self:AddMenuOptions(menu, "Unwhitelist Class", "icon16/user_delete.png", options)
+
+    // Transfer classes
+    options = {}
+    for k, v in SortedPairsByMemberValue(ix.class.list, "sortOrder") do
+        if ( !target:HasClassWhitelist(v.index) ) then continue end
+        if ( !target:GetCharacter() ) then continue end
+        if ( target:GetCharacter():GetClass() == v.index ) then continue end
+
+        options[L(v.name)] = function()
+            RunConsoleCommand("ix", "CharSetClass", id, v.uniqueID)
+        end
+    end
+
+    self:AddMenuOptions(menu, "Transfer Class", "icon16/user_go.png", options)
+
+    menu:AddSpacer()
 
     // Whitelist ranks
-    if ( target.HasRankWhitelist ) then
-        local ranks = {}
-        for k, v in SortedPairsByMemberValue(ix.rank.list, "sortOrder") do
-            if ( target:HasRankWhitelist(v.index) ) then continue end
+    options = {}
+    for k, v in SortedPairsByMemberValue(ix.rank.list, "sortOrder") do
+        if ( target:HasRankWhitelist(v.index) ) then continue end
 
-            ranks[v.name] = function()
-                RunConsoleCommand("ix", "PlyRankWhitelist", id, v.uniqueID)
-            end
+        options[L(v.name)] = function()
+            RunConsoleCommand("ix", "PlyRankWhitelist", id, v.uniqueID)
         end
-
-        self:AddMenuOptions(menu, "Whitelist Rank", "icon16/user_add.png", ranks)
-
-        // Unwhitelist ranks
-        ranks = {}
-        for k, v in SortedPairsByMemberValue(ix.rank.list, "sortOrder") do
-            if ( !target:HasRankWhitelist(v.index) ) then continue end
-
-            ranks[v.name] = function()
-                RunConsoleCommand("ix", "PlyUnRankWhitelist", id, v.uniqueID)
-            end
-        end
-
-        self:AddMenuOptions(menu, "Unwhitelist Rank", "icon16/user_delete.png", ranks)
-
-        menu:AddSpacer()
     end
+
+    self:AddMenuOptions(menu, "Whitelist Rank", "icon16/user_add.png", options)
+
+    // Unwhitelist ranks
+    options = {}
+    for k, v in SortedPairsByMemberValue(ix.rank.list, "sortOrder") do
+        if ( !target:HasRankWhitelist(v.index) ) then continue end
+
+        options[L(v.name)] = function()
+            RunConsoleCommand("ix", "PlyUnRankWhitelist", id, v.uniqueID)
+        end
+    end
+
+    self:AddMenuOptions(menu, "Unwhitelist Rank", "icon16/user_delete.png", options)
+
+    // Transfer ranks
+    options = {}
+    for k, v in SortedPairsByMemberValue(ix.rank.list, "sortOrder") do
+        if ( !target:HasRankWhitelist(v.index) ) then continue end
+        if ( !target:GetCharacter() ) then continue end
+        if ( target:GetCharacter():GetRank() == v.index ) then continue end
+
+        options[L(v.name)] = function()
+            RunConsoleCommand("ix", "CharSetRank", id, v.uniqueID)
+        end
+    end
+
+    self:AddMenuOptions(menu, "Transfer Rank", "icon16/user_go.png", options)
+
+    menu:AddSpacer()
 end
 
 function PLUGIN:LoadFonts()
@@ -416,7 +472,7 @@ function PLUGIN:Think()
         observerLight = !observerLight
         nextObserverLight = CurTime() + 1
 
-        --LocalPlayer():EmitSound("buttons/lever7.wav", 60, observerLight and 150 or 100)
+        LocalPlayer():EmitSound("buttons/lever7.wav", 60, observerLight and 150 or 100)
     end
 end
 

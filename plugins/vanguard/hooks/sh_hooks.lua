@@ -198,7 +198,7 @@ function PLUGIN:OnPlayerHitGround(ply, inWater, onFloater, speed)
 end
 
 hook.Add("CAMI.PlayerHasAccess", "Vanguard.CAMI.PlayerHasAccess", function(ply, privilege, callback)
-    if ( !IsValid(ply) ) then callback(false) end
+    if ( !IsValid(ply) or !ply:IsPlayer() ) then callback(false) end
 
     local userGroup = ply:GetUserGroup()
     if ( !userGroup ) then callback(false) end

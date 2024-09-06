@@ -120,7 +120,7 @@ function PANEL:FilterLogs(search)
     self:PopulateLogs(self.page, search)
 end
 
-local stringMatches = ix.util.StringMatchesExtreme
+local stringMatches = ix.util.StringMatchesTable
 function PANEL:PopulateLogs(page, filter)
     self.logsList:GetCanvas():Clear()
     self.page = page
