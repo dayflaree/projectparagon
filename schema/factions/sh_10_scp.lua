@@ -1,4 +1,4 @@
-FACTION.name = "SCP"
+FACTION.name = "Anomaly"
 FACTION.description = ""
 FACTION.color = Color(200, 50, 50)
 
