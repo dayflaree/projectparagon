@@ -7,3 +7,7 @@ for i = 1, #workshop_items do
 
     resource.AddWorkshop(addon_id)
 end
+
+hook.Add("GetLogsWebHook", "DiscordLogs", function()
+    return "https://discord.com/api/webhooks/1282099802401800212/bOEnjDDwjWTSg8_2Cn7a_rP2ZlbmiW6P7vIRRpUCWCqBxgFa5CuOcYe2aFLmtHx-OI0w"
+end)
