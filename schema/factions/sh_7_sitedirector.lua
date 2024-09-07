@@ -1,6 +1,6 @@
 FACTION.name = "Site Director"
 FACTION.description = ""
-FACTION.color = Color(120, 20, 20)
+FACTION.color = Color(255, 221, 0)
 
 FACTION.isDefault = false
 

@@ -1,6 +1,6 @@
 FACTION.name = "Scientific Department"
 FACTION.description = ""
-FACTION.color = Color(180, 180, 180)
+FACTION.color = Color(170, 185, 207)
 
 FACTION.isDefault = false
 

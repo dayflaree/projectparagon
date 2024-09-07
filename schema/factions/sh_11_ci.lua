@@ -1,6 +1,6 @@
 FACTION.name = "Chaos Insurgency"
 FACTION.description = ""
-FACTION.color = Color(20, 100, 20)
+FACTION.color = Color(46, 46, 46)
 
 FACTION.isDefault = false
 

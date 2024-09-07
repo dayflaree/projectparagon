@@ -1,6 +1,6 @@
 FACTION.name = "Event Faction"
 FACTION.description = ""
-FACTION.color = Color(20, 100, 140)
+FACTION.color = Color(190, 190, 190)
 
 FACTION.isDefault = false
 

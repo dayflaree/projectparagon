@@ -1,6 +1,6 @@
 FACTION.name = "Mobile Task Force"
 FACTION.description = ""
-FACTION.color = Color(110, 100, 200)
+FACTION.color = Color(136, 52, 52)
 
 FACTION.isDefault = false
 

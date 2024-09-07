@@ -1,6 +1,6 @@
 FACTION.name = "05 Council"
 FACTION.description = ""
-FACTION.color = Color(10, 10, 10)
+FACTION.color = Color(0, 0, 0)
 
 FACTION.isDefault = false
 

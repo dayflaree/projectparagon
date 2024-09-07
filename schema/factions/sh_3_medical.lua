@@ -1,6 +1,6 @@
 FACTION.name = "Medical Department"
 FACTION.description = ""
-FACTION.color = Color(120, 120, 250)
+FACTION.color = Color(186, 247, 216)
 
 FACTION.isDefault = false
 

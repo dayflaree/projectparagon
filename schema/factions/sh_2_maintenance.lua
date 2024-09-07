@@ -1,6 +1,6 @@
-FACTION.name = "Engineering & Technical Service Department"
+FACTION.name = "Maintenance Department"
 FACTION.description = ""
-FACTION.color = Color(0, 127, 63)
+FACTION.color = Color(216, 218, 93)
 FACTION.isDefault = false
 
 FACTION.models = {
