@@ -16,7 +16,7 @@ ENT.bNoPersist = true
 
 if ( SERVER ) then
     function ENT:Initialize()
-        self:SetModel("models/Items/ammocrate_smg1.mdl")
+        self:SetModel("models/scp/map/props/crate1.mdl")
         self:PhysicsInit(SOLID_VPHYSICS) 
         self:SetSolid(SOLID_VPHYSICS)
         self:SetUseType(SIMPLE_USE)
@@ -55,19 +55,14 @@ if ( SERVER ) then
                 timer.Simple(0.25, function()
                     if not ( IsValid(self) and IsValid(ply) and ply:Alive() ) then return end
         
-                    self:EmitSound("items/ammo_pickup.wav")
-                    ply:EmitSound("items/ammo_pickup.wav")
+                    self:EmitSound("projectparagon/gamesounds/scpcb/interact/pickitem1.ogg")
+                    ply:EmitSound("projectparagon/gamesounds/scpcb/interact/pickitem1.ogg")
                     ply:SetAmmo(ammo, weapon:GetPrimaryAmmoType())
                 end)
         
                 if ( ( self.animationCooldown or 0 ) > CurTime() ) then return end
-                self:ResetSequence("open")
-                self:EmitSound("items/ammocrate_open.wav")
                 timer.Simple(0.5, function()
                     if not ( IsValid(self) and IsValid(ply) and ply:Alive() ) then return end
-                    
-                    self:ResetSequence("close")
-                    self:EmitSound("items/ammocrate_close.wav")
                 end)
                 self.animationCooldown = CurTime() + 1
             end

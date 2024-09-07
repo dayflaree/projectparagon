@@ -11,6 +11,7 @@ PLUGIN.radius = 70
 PLUGIN.whitelisted = {
     ["ix_item"] = true,
     ["func_button"] = true,
+    ["ix_ammocrate"] = true,
 }
 
 // if buttons don't work, we get their model instead..
