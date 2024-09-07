@@ -1,4 +1,5 @@
 local menu_background = ix.util.GetMaterial("90/projectparagon/ui/paragon_ui/paragon_menu_alt.png")
+local menu_image = ix.util.GetMaterial("90/projectparagon/ui/menu/scp_173_back.png")
 
 local gradient = surface.GetTextureID("vgui/gradient-d")
 local audioFadeInTime = 2
@@ -131,6 +132,7 @@ function PANEL:Init()
 	-- create character button
 	local createButton = self.mainButtonList:Add("ixMenuButton")
 	createButton:SetText("New Character")
+	createButton:SetFont("ParagonMenuButton")
 	createButton:SetTall(createButton:GetTall() * 1.5)
 	createButton:DockMargin(0, 0, 0, ScreenScale(8))
 	createButton.DoClick = function()
@@ -149,6 +151,7 @@ function PANEL:Init()
 	-- load character button
 	self.loadButton = self.mainButtonList:Add("ixMenuButton")
 	self.loadButton:SetText("Load Character")
+	self.loadButton:SetFont("ParagonMenuButton")
 	self.loadButton:SetTall(self.loadButton:GetTall() * 1.5)
 	self.loadButton:DockMargin(0, 0, 0, ScreenScale(8))
 	self.loadButton.DoClick = function()
@@ -171,6 +174,7 @@ function PANEL:Init()
 
 		local extraButton = self.mainButtonList:Add("ixMenuButton")
 		extraButton:SetText(extraText, true)
+		extraButton:SetFont("ParagonMenuButton")
 		extraButton:SetTall(extraButton:GetTall() * 1.5)
 		extraButton:DockMargin(0, 0, 0, ScreenScale(8))
 		extraButton.DoClick = function()
@@ -201,9 +205,10 @@ function PANEL:UpdateReturnButton(bValue)
 		self.bUsingCharacter = bValue
 	end
 
-	self.returnButton:SetText(self.bUsingCharacter and "return" or "leave")
-	self.returnButton:SizeToContents()
+	self.returnButton:SetText(self.bUsingCharacter and "RETURN" or "DISCONNECT")
+	self.returnButton:SetFont("ParagonMenuButton")
 	self.returnButton:SetTall(self.returnButton:GetTall() * 1.5)
+	self.returnButton:SizeToContents()
 end
 
 function PANEL:OnDim()
@@ -434,6 +439,14 @@ function PANEL:Paint(width, height)
 	surface.SetDrawColor(255, 255, 255, 255)
 	surface.SetMaterial(menu_background)
 	surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
+
+    local imageWidth, imageHeight = 212, 341
+    local posX = width - imageWidth - 5
+    local posY = 750
+
+    surface.SetDrawColor(255, 255, 255, 255)
+    surface.SetMaterial(menu_image)
+    surface.DrawTexturedRect(posX, posY, imageWidth, imageHeight)
 end
 
 function PANEL:PaintOver(width, height)

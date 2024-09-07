@@ -106,3 +106,9 @@ sound.Add({
     pitch = 100,
     sound = "projectparagon/gamesounds/scpcb/interact/button2.ogg",
 })
+
+surface.CreateFont("ParagonMenuButton", {
+    font = "Courier New", -- You can use other font names if needed
+    size = 56,      -- Set the size (scale) of the font here
+    weight = 500,
+})
