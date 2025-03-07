@@ -3,6 +3,11 @@ PLUGIN.name = "Passive Announcements"
 PLUGIN.author = "dayflare"
 PLUGIN.description = "Plays random global audio announcements with chat messages on a configurable delay."
 
+-- Add configuration option to enable/disable the PA system
+ix.config.Add("paSystemEnabled", true, "Whether or not the PA System announcements are enabled.", nil, {
+    category = "Passive Announcements"
+})
+
 -- Configuration: List of announcements with audio files and chat messages
 PLUGIN.announcements = {
     {
@@ -84,8 +89,26 @@ function PLUGIN:InitializedChatClasses()
 end
 
 if (SERVER) then
+    -- Variable to store the timer identifier
+    local paTimerIdentifier = "ix.paSystem.nextAnnouncement"
+    
     -- Function to play an announcement
     local function PlayAnnouncement()
+        -- Always check if PA system is enabled before proceeding
+        if not ix.config.Get("paSystemEnabled") then
+            -- System is disabled, schedule a check after 60 seconds to see if it's been re-enabled
+            timer.Create(paTimerIdentifier, 60, 1, function()
+                -- When we check again, validate the config again
+                if ix.config.Get("paSystemEnabled") then
+                    PlayAnnouncement()
+                else
+                    -- Still disabled, check again later
+                    timer.Create(paTimerIdentifier, 60, 1, PlayAnnouncement)
+                end
+            end)
+            return
+        end
+        
         -- Pick a random announcement from the list
         local announcement = announcements[math.random(1, #announcements)]
         
@@ -107,16 +130,61 @@ if (SERVER) then
         
         -- Schedule the next announcement with a random delay
         local delay = math.random(minDelay, maxDelay)
-        timer.Simple(delay, PlayAnnouncement)
+        timer.Create(paTimerIdentifier, delay, 1, PlayAnnouncement)
     end
     
     -- Start the announcement system when the plugin loads
     function PLUGIN:InitializedPlugins()
+        -- Clean up any existing timers
+        if timer.Exists(paTimerIdentifier) then
+            timer.Remove(paTimerIdentifier)
+        end
+        
         -- Initial delay before the first announcement
         local initialDelay = math.random(minDelay, maxDelay)
-        timer.Simple(initialDelay, PlayAnnouncement)
-        print("[PassiveAnnouncements] Started with initial delay of " .. initialDelay .. " seconds")
+        
+        -- Only start the system if it's enabled
+        if ix.config.Get("paSystemEnabled") then
+            print("[PassiveAnnouncements] Starting with initial delay of " .. initialDelay .. " seconds")
+            timer.Create(paTimerIdentifier, initialDelay, 1, PlayAnnouncement)
+        else
+            print("[PassiveAnnouncements] PA System is disabled via configuration")
+        end
     end
+    
+    -- Handle configuration changes
+    function PLUGIN:OnConfigChanged(key, oldValue, newValue)
+        if key == "paSystemEnabled" then
+            print("[PassiveAnnouncements] Configuration changed: " .. tostring(key) .. " = " .. tostring(newValue))
+            
+            if newValue then
+                -- System was disabled and is now enabled
+                if not timer.Exists(paTimerIdentifier) then
+                    local delay = math.random(minDelay, maxDelay)
+                    print("[PassiveAnnouncements] PA System enabled - starting with delay of " .. delay .. " seconds")
+                    timer.Create(paTimerIdentifier, delay, 1, PlayAnnouncement)
+                end
+            else
+                -- System was enabled and is now disabled
+                if timer.Exists(paTimerIdentifier) then
+                    print("[PassiveAnnouncements] PA System disabled - stopping announcements")
+                    timer.Remove(paTimerIdentifier)
+                end
+            end
+        end
+    end
+    
+    -- Add a command to toggle the PA system (optional, for testing)
+    ix.command.Add("patoggle", {
+        description = "Toggles the PA System announcements.",
+        adminOnly = true,
+        OnRun = function(self, client)
+            local currentValue = ix.config.Get("paSystemEnabled")
+            ix.config.Set("paSystemEnabled", not currentValue)
+            
+            return "PA System has been " .. (not currentValue and "enabled" or "disabled") .. "."
+        end
+    })
 end
 
 return PLUGIN

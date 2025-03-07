@@ -29,6 +29,7 @@ local config = {
     allowGlobalOOC = false,
     chatColor = Color(255, 217, 67),
     chatListenColor = Color(107, 193, 78),
+    paSystemEnabled = true,
     runClassHook = true,
     maxCharacters = 4,
     inventoryHeight = 2,
