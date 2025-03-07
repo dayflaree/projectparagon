@@ -16,7 +16,7 @@ function FACTION:ModifyPlayerStep(client, data)
         "ProjectParagon/GameSounds/scpcb/Character/MTF/Step3.ogg"
     }
     
-    local chosenSound = secSounds[math.random(#ciSounds)]
+    local chosenSound = secSounds[math.random(#secSounds)]
     local volume = data.running and 0.8 or 0.4
     
     data.snd = chosenSound

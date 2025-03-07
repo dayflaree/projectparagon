@@ -1,5 +1,4 @@
 local menublack = ix.util.GetMaterial("90/projectparagon/ui/menu/menu_black.png")
-local menuwhite = ix.util.GetMaterial("90/projectparagon/ui/menu/menu_white.png")
 
 local animationTime = 1
 local matrixZScale = Vector(1, 1, 0.0001)
@@ -409,11 +408,6 @@ function PANEL:Think()
 end
 
 function PANEL:Paint(width, height)
-    surface.SetDrawColor(ColorAlpha(ix.config.Get("color"), 10))
-    surface.SetMaterial(menuwhite)
-    surface.DrawTexturedRect(0, 0, width / 2, height)
-    surface.DrawTexturedRect(width / 2, 0, width / 2, height)
-
     surface.SetDrawColor(50, 50, 50, 200)
     surface.SetMaterial(menublack)
     surface.DrawTexturedRect(0, 0, width / 2, height)

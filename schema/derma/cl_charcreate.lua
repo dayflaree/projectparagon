@@ -97,57 +97,15 @@ function PANEL:Init()
 		end
 	end
 
+	-- Add the create button directly to the description panel instead of attributes panel
 	local descriptionProceed = descriptionModelList:Add("ixMenuButton")
-	descriptionProceed:SetText("proceed")
+	descriptionProceed:SetText("finish")  -- Changed from "proceed" to "finish"
 	descriptionProceed:SetContentAlignment(6)
 	descriptionProceed:Dock(BOTTOM)
 	descriptionProceed.DoClick = function()
 		if (self:VerifyProgression("description")) then
-			-- there are no panels on the attributes section other than the create button, so we can just create the character
-			if (#self.attributesPanel:GetChildren() < 2) then
-				self:SendPayload()
-				return
-			end
-
-			self.progress:IncrementProgress()
-			self:SetActiveSubpanel("attributes")
+			self:SendPayload()
 		end
-	end
-
-	-- attributes subpanel
-	self.attributes = self:AddSubpanel("attributes")
-	self.attributes:SetTitle("chooseSkills")
-
-	local attributesModelList = self.attributes:Add("Panel")
-	attributesModelList:Dock(LEFT)
-	attributesModelList:SetSize(halfWidth, halfHeight)
-
-	local attributesBack = attributesModelList:Add("ixMenuButton")
-	attributesBack:SetText("return")
-	attributesBack:SetContentAlignment(4)
-	attributesBack:Dock(BOTTOM)
-	attributesBack.DoClick = function()
-		self.progress:DecrementProgress()
-		self:SetActiveSubpanel("description")
-	end
-
-	self.attributesModel = attributesModelList:Add("ixModelPanel")
-	self.attributesModel:Dock(FILL)
-	self.attributesModel:SetModel(self.factionModel:GetModel())
-	self.attributesModel:SetFOV(modelFOV - 13)
-	self.attributesModel.PaintModel = self.attributesModel.Paint
-
-	self.attributesPanel = self.attributes:Add("Panel")
-	self.attributesPanel:SetWide(halfWidth + padding * 2)
-	self.attributesPanel:Dock(RIGHT)
-
-
-	local create = self.attributesPanel:Add("ixMenuButton")
-	create:SetText("finish")
-	create:SetContentAlignment(6)
-	create:Dock(BOTTOM)
-	create.DoClick = function()
-		self:SendPayload()
 	end
 
 	-- creation progress panel
@@ -168,11 +126,9 @@ function PANEL:Init()
 			if (istable(model)) then
 				self.factionModel:SetModel(model[1], model[2] or 0, model[3])
 				self.descriptionModel:SetModel(model[1], model[2] or 0, model[3])
-				self.attributesModel:SetModel(model[1], model[2] or 0, model[3])
 			else
 				self.factionModel:SetModel(model)
 				self.descriptionModel:SetModel(model)
-				self.attributesModel:SetModel(model)
 			end
 		end
 	end)
@@ -316,13 +272,7 @@ function PANEL:RunPayloadHook(key, value)
 end
 
 function PANEL:GetContainerPanel(name)
-	-- TODO: yuck
-	if (name == "description") then
-		return self.descriptionPanel
-	elseif (name == "attributes") then
-		return self.attributesPanel
-	end
-
+	-- Only return description panel since we've removed attributes
 	return self.descriptionPanel
 end
 
@@ -395,6 +345,11 @@ function PANEL:Populate()
 	-- set up character vars
 	for k, v in SortedPairsByMemberValue(ix.char.vars, "index") do
 		if (!v.bNoDisplay and k != "__SortedIndex") then
+			-- Skip attributes category entirely
+			if (v.category == "attributes") then
+				continue
+			end
+			
 			local container = self:GetContainerPanel(v.category or "description")
 
 			if (v.ShouldDisplay and v:ShouldDisplay(container, self.payload) == false) then
@@ -450,10 +405,6 @@ function PANEL:Populate()
 
 		self.progress:AddSegment("@description")
 
-		if (#self.attributesPanel:GetChildren() > 1) then
-			self.progress:AddSegment("@skills")
-		end
-
 		-- we don't need to show the progress bar if there's only one segment
 		if (#self.progress:GetSegments() == 1) then
 			self.progress:SetVisible(false)
@@ -465,6 +416,11 @@ end
 
 function PANEL:VerifyProgression(name)
 	for k, v in SortedPairsByMemberValue(ix.char.vars, "index") do
+		-- Skip attributes validation
+		if (v.category == "attributes") then
+			continue
+		end
+		
 		if (name ~= nil and (v.category or "description") != name) then
 			continue
 		end

@@ -4,7 +4,7 @@ FACTION.color = Color(216, 218, 93)
 FACTION.isDefault = false
 
 FACTION.models = {
-    "models/cpthazama/scp/janitor.mdl",
+    "models/painkiller_76/sf2/classd/classd.mdl",
 }
 
 function FACTION:OnCharacterCreated(ply, char)

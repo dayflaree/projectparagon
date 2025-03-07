@@ -1,10 +1,3 @@
---[[
-    Voice Chat Indicator Plugin for Garry's Mod (Helix Framework)
-    
-    This plugin shows a microphone icon in the bottom right corner when the local player is using voice chat,
-    and displays "Speaking..." text above other players who are using voice chat.
-]]--
-
 local PLUGIN = PLUGIN or {}
 PLUGIN.name = "Voice Chat Indicator"
 PLUGIN.author = "Claude"
@@ -33,10 +26,10 @@ if CLIENT then
         self.micIcon = Material("90/projectparagon/ui/icons/scpcb/hud_textures/micicon.png")
         
         -- Create or get a font for the speaking text
-        if !self.thirdPersonFont then
+        if not self.thirdPersonFont then
             self.thirdPersonFont = self.config.thirdPersonText.font
             
-            if !font.Exists(self.thirdPersonFont) then
+            if not font then -- font library might not be available, fallback to surface
                 surface.CreateFont(self.thirdPersonFont, {
                     font = "Courier New",
                     size = 24,
@@ -57,24 +50,24 @@ if CLIENT then
     end
     
     function PLUGIN:PlayerEndVoice(player)
-        self.voiceStates[player] = false
+        self.voiceStates[player] = nil -- Use nil instead of false to save memory
     end
     
     -- Draw first-person icon for the local player
     function PLUGIN:HUDPaint()
-        if !self.config.firstPersonIcon.enabled then return end
+        if not self.config.firstPersonIcon.enabled then return end
         
         local client = LocalPlayer()
-        if !IsValid(client) then return end
+        if not IsValid(client) then return end
         
         -- Make sure micIcon exists
-        if !self.micIcon then
+        if not self.micIcon then
             self.micIcon = Material("90/projectparagon/ui/icons/scpcb/hud_textures/micicon.png")
             -- If it still doesn't exist, use a fallback
-            if !self.micIcon or self.micIcon:IsError() then
+            if not self.micIcon or self.micIcon:IsError() then
                 self.micIcon = Material("90/projectparagon/ui/icons/scpcb/hud_textures/micicon.png")
                 -- Last resort fallback
-                if !self.micIcon or self.micIcon:IsError() then
+                if not self.micIcon or self.micIcon:IsError() then
                     -- Draw a simple circle instead of using a material
                     if self.voiceStates[client] then
                         local size = self.config.firstPersonIcon.size
@@ -83,7 +76,8 @@ if CLIENT then
                         local posY = screenH - size - self.config.firstPersonIcon.position.y
                         
                         surface.SetDrawColor(255, 255, 255, 255)
-                        surface.DrawCircle(posX + size/2, posY + size/2, size/2, Color(255, 255, 255, 255))
+                        draw.NoTexture() -- Reset texture
+                        surface.DrawCircle(posX + size/2, posY + size/2, size/2)
                         return
                     end
                 end
@@ -106,9 +100,9 @@ if CLIENT then
     
     -- Draw "Speaking..." text above other players' heads
     function PLUGIN:PostPlayerDraw(player)
-        if !self.config.thirdPersonText.enabled then return end
+        if not self.config.thirdPersonText.enabled then return end
         
-        -- Don't show text for the local player (since they see the icon)
+        -- Don’t show text for the local player (since they see the icon)
         if player == LocalPlayer() then return end
         
         -- Check if player is using voice
@@ -134,6 +128,3 @@ if CLIENT then
         end
     end
 end
-
--- Add the plugin to Helix
-ix.plugin.Register(PLUGIN)

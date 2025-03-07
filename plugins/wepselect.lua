@@ -173,8 +173,8 @@ if (CLIENT) then
                 self.markup = markup.Parse("<font=ixItemDescFont>"..text, 190)
             end
 
-            local source, pitch = hook.Run("WeaponCycleSound")
-            LocalPlayer():EmitSound(source or "common/talk.wav", 50, pitch or 180)
+            --local source, pitch = hook.Run("WeaponCycleSound")
+            --LocalPlayer():EmitSound(source or "", 50, pitch or 180)
         end
     end
 
@@ -224,7 +224,7 @@ if (CLIENT) then
             local weapon = weapons[self.index]
 
             if (IsValid(weapon)) then
-                LocalPlayer():EmitSound(hook.Run("WeaponSelectSound", weapon) or "HL2Player.Use")
+                --LocalPlayer():EmitSound(hook.Run("WeaponSelectSound", weapon) or "HL2Player.Use")
 
                 input.SelectWeapon(weapon)
                 self.visible = false

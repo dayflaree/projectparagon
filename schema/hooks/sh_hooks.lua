@@ -10,6 +10,12 @@ function Schema:CanPlayerJoinClass()
 	return false
 end
 
+function Schema:PlayerBindPress(client, bind, pressed)
+    if (bind:find("+zoom") and pressed) then
+        return true
+    end
+end
+
 function Schema:OnReloaded()
     if ( SERVER ) then
         if ( ( nextserverRefresh or 0 ) <= CurTime() ) then
