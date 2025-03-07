@@ -5,7 +5,7 @@ FACTION.isDefault = true
 FACTION.models = {"models/cpthazama/scp/dclass.mdl"}
 
 function FACTION:OnCharacterCreated(ply, char)
-    char:SetName("D-"..Schema:ZeroNumber(math.random(1, 99999), 4).." "..char:GetName())
+    char:SetName("D-"..Schema:ZeroNumber(math.random(1, 9999), 4).." "..char:GetName())
 
 end
 

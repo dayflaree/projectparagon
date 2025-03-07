@@ -434,17 +434,36 @@ end
 
 local surface = surface
 local DrawLine = surface.DrawLine
+local lastFlashTime = 0
+local isVisible = true
+local flashMinInterval = 0.1
+local flashMaxInterval = 0.5
+local flashDuration = 0.1
 
 function PANEL:Paint(width, height)
-	surface.SetDrawColor(255, 255, 255, 255)
-	surface.SetMaterial(menu_background)
-	surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
+    surface.SetDrawColor(255, 255, 255, 255)
+    surface.SetMaterial(menu_background)
+    surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
 
+    -- Handle 173 image flashing
+    local currentTime = CurTime()
+    
+    -- Check if it's time for a new flash state
+    if currentTime > lastFlashTime then
+        isVisible = not isVisible
+        -- Set the next flash time with some randomness
+        lastFlashTime = currentTime + (isVisible and math.Rand(flashMinInterval, flashMaxInterval) or flashDuration)
+    end
+    
+    -- Draw SCP-173 image with appropriate alpha
     local imageWidth, imageHeight = 212, 341
     local posX = width - imageWidth - 5
     local posY = 750
 
-    surface.SetDrawColor(255, 255, 255, 255)
+    -- Alpha value is either 255 (fully visible) or 0 (invisible)
+    local alpha = isVisible and 255 or 0
+    
+    surface.SetDrawColor(255, 255, 255, alpha)
     surface.SetMaterial(menu_image)
     surface.DrawTexturedRect(posX, posY, imageWidth, imageHeight)
 end

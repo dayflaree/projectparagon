@@ -16,7 +16,7 @@ ix.util.IncludeDir("meta")
 local config = {
     color = Color(255, 255, 255),
     music = "projectparagon/ui/paragon_menu.mp3",
-    communityURL = "https://discord.gg/nUBpfxDPee",
+    communityURL = "",
     font = "Courier New",
     genericFont = "Courier New",
     intro = false,
@@ -45,15 +45,15 @@ end
 
 -- Schema playermodels
 
-player_manager.AddValidModel("Passive", "models/projectparagon/classd/classd.mdl")
-player_manager.AddValidModel("Passive", "models/projectparagon/clerk/clerk.mdl")
+player_manager.AddValidModel("Passive", "models/painkiller_76/sf2/classd/classd.mdl")
+player_manager.AddValidModel("Passive", "models/painkiller_76/sf2/clerk/clerk.mdl")
 player_manager.AddValidHands("Passive", "models/projectparagon/classd/d_class_player_vm.mdl", 0, "00000000")
-player_manager.AddValidModel("Combatant", "models/projectparagon/guard/guard.mdl")
-player_manager.AddValidModel("Combatant", "models/projectparagon/guard2/guard2.mdl")
+player_manager.AddValidModel("Combatant", "models/scpcbmultiplayer/dughoo/guardd.mdl")
+player_manager.AddValidModel("Combatant", "models/scpcbmultiplayer/dughoo/mtf.mdl")
 player_manager.AddValidModel("Combatant", "models/cpthazama/scp/ntf.mdl")
-player_manager.AddValidModel("Combatant", "models/projectparagon/chaos/chaos.mdl")
+player_manager.AddValidModel("Combatant", "models/scpcbmultiplayer/ghostsynthported/chaos.mdl")
 player_manager.AddValidHands("Combatant", "models/projectparagon/scp_combatant_vm.mdl", 0, "00000000")
-player_manager.AddValidModel("SCP-049", "models/cpthazama/scp/049.mdl")
+player_manager.AddValidModel("SCP-049", "models/painkiller_76/sf2/scp049/049_v2.mdl")
 player_manager.AddValidHands("SCP-049", "models/scp049upgrade/weapons/c_arms_scp049_upgrade.mdl", 0, "00000000")
 
 -- Schema flags
