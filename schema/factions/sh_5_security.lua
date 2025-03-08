@@ -1,11 +1,16 @@
 FACTION.name = "Security Department"
 FACTION.description = ""
 FACTION.color = Color(50, 103, 182)
-
 FACTION.isDefault = false
-
 FACTION.models = {
     "models/projectparagon/guard/guard.mdl",
+}
+
+FACTION.radioConfig = {
+    startVoice = "ProjectParagon/Player/radio_beep1.mp3",
+    endVoice = "ProjectParagon/Player/radio_beep2.mp3",
+    startTyping = "ProjectParagon/Player/radio_beep1.mp3",
+    endTyping = "ProjectParagon/Player/radio_beep2.mp3"
 }
 
 function FACTION:ModifyPlayerStep(client, data)

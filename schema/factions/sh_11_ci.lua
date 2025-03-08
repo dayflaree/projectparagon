@@ -1,11 +1,16 @@
 FACTION.name = "Chaos Insurgency"
 FACTION.description = ""
 FACTION.color = Color(46, 46, 46)
-
 FACTION.isDefault = false
-
 FACTION.models = {
     "models/cpthazama/scp/chaos.mdl",
+}
+
+FACTION.radioConfig = {
+    startVoice = "ProjectParagon/Player/radio_beep1.mp3",
+    endVoice = "ProjectParagon/Player/radio_beep3.mp3",
+    startTyping = "ProjectParagon/Player/radio_beep1.mp3",
+    endTyping = "ProjectParagon/Player/radio_beep3.mp3"
 }
 
 function FACTION:ModifyPlayerStep(client, data)

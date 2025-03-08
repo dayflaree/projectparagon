@@ -197,7 +197,9 @@ if (CLIENT) then
 
         local weapons = client:GetWeapons()
 
-        if (bind:find("invprev") and !bTool) then
+        -- FIXED: Swapped invprev and invnext to correct the scroll direction
+        if (bind:find("invnext") and !bTool) then
+            -- Scrolling down - decrease index (move down the list)
             local oldIndex = self.index
             self.index = math.min(self.index + 1, #weapons)
 
@@ -206,7 +208,8 @@ if (CLIENT) then
             end
 
             return true
-        elseif (bind:find("invnext") and !bTool) then
+        elseif (bind:find("invprev") and !bTool) then
+            -- Scrolling up - increase index (move up the list) 
             local oldIndex = self.index
             self.index = math.max(self.index - 1, 1)
 

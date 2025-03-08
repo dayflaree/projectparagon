@@ -1,11 +1,16 @@
 FACTION.name = "Mobile Task Force"
 FACTION.description = ""
 FACTION.color = Color(136, 52, 52)
-
 FACTION.isDefault = false
-
 FACTION.models = {
     "models/cpthazama/scp/ntf.mdl",
+}
+
+FACTION.radioConfig = {
+    startVoice = "ProjectParagon/Player/radio_beep1.mp3",
+    endVoice = "ProjectParagon/Player/radio_beep3.mp3",
+    startTyping = "ProjectParagon/Player/radio_beep1.mp3",
+    endTyping = "ProjectParagon/Player/radio_beep3.mp3"
 }
 
 function FACTION:ModifyPlayerStep(client, data)
