@@ -1,7 +1,7 @@
 local PLUGIN = PLUGIN or {}
 
 PLUGIN.name = "Enhanced Player Sound Effects"
-PLUGIN.author = "Created with Claude's assistance"
+PLUGIN.author = "Claude"
 PLUGIN.description = "Combines blood drip sounds based on health thresholds with custom pain and death sounds. Also creates blood decals on ground."
 
 -- Configuration for custom pain and death sounds
