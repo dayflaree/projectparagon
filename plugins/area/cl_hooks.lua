@@ -35,24 +35,18 @@ function PLUGIN:ChatboxCreated()
 end
 
 function PLUGIN:ChatboxPositionChanged(x, y, width, height)
-    if (!IsValid(self.panel)) then
-        return
-    end
+    if (!IsValid(self.panel)) then return end
 
     self.panel:SetSize(width, y)
     self.panel:SetPos(32, 0)
 end
 
 function PLUGIN:ShouldDrawCrosshair()
-    if (ix.area.bEditing) then
-        return true
-    end
+    if (ix.area.bEditing) then return true end
 end
 
 function PLUGIN:PlayerBindPress(client, bind, bPressed)
-    if (!ix.area.bEditing) then
-        return
-    end
+    if (!ix.area.bEditing) then return end
 
     if ((bind:find("invnext") or bind:find("invprev")) and bPressed) then
         return true
@@ -69,40 +63,39 @@ function PLUGIN:PlayerBindPress(client, bind, bPressed)
 end
 
 function PLUGIN:HUDPaint()
-    if (!ix.area.bEditing) then
-        return
-    end
+    if (!ix.area.bEditing) then return end
 
     local id = LocalPlayer():GetArea()
     local area = ix.area.stored[id]
     local height = ScrH()
 
-    local y = 64
-    y = y + DrawTextBackground(64, y, L("areaEditMode"), nil, ix.config.Get("color"))
+    local x, y = ScreenScale(16), ScreenScale(16)
+    if (IsValid(ix.gui.areaEdit)) then
+        x = ix.gui.areaEdit:GetX() + ix.gui.areaEdit:GetWide() + ScreenScale(16)
+    end
+    y = y + DrawTextBackground(x, y, L("areaEditMode"), nil, ix.config.Get("color"))
 
     if (!self.editStart) then
-        y = y + DrawTextBackground(64, y, L("areaEditTip"), "ixSmallTitleFont")
-        DrawTextBackground(64, y, L("areaRemoveTip"), "ixSmallTitleFont")
+        y = y + DrawTextBackground(x, y, L("areaEditTip"), "ixSmallTitleFont")
+        DrawTextBackground(x, y, L("areaRemoveTip"), "ixSmallTitleFont")
     else
-        DrawTextBackground(64, y, L("areaFinishTip"), "ixSmallTitleFont")
+        DrawTextBackground(x, y, L("areaFinishTip"), "ixSmallTitleFont")
     end
 
     if (area) then
-        DrawTextBackground(64, height - 64 - ScreenScale(12), id, "ixSmallTitleFont", area.properties.color)
+        DrawTextBackground(x, height - 64 - ScreenScale(12), id, "ixSmallTitleFont", area.properties.color)
     end
 end
 
 function PLUGIN:PostDrawTranslucentRenderables(bDepth, bSkybox)
-    if (bSkybox or !ix.area.bEditing) then
-        return
-    end
+    if (bSkybox or !ix.area.bEditing) then return end
 
-    // draw all areas
+    -- draw all areas
     for k, v in pairs(ix.area.stored) do
         local center, min, max = self:GetLocalAreaPosition(v.startPosition, v.endPosition)
         local color = ColorAlpha(v.properties.color or ix.config.Get("color"), 255)
 
-        render.DrawWireframeBox(center, angle_zero, min, max, color)
+        render.DrawWireframeBox(center, Angle(0, 0, 0), min, max, color)
 
         cam.Start2D()
             local centerScreen = center:ToScreen()
@@ -118,12 +111,17 @@ function PLUGIN:PostDrawTranslucentRenderables(bDepth, bSkybox)
         cam.End2D()
     end
 
-    // draw currently edited area
+    -- draw currently edited area
     if (self.editStart) then
-        local center, min, max = self:GetLocalAreaPosition(self.editStart, self:GetPlayerAreaTrace().HitPos)
+        local pos = self:GetPlayerAreaTrace().HitPos
+        local snap = ix.option.Get("areaEditSnap", 8)
+        snap = snap == 0 and 0.1 or snap
+        pos = Vector(math.Round(pos.x / snap) * snap, math.Round(pos.y / snap) * snap, math.Round(pos.z / snap) * snap)
+
+        local center, min, max = self:GetLocalAreaPosition(self.editStart, pos)
         local color = Color(255, 255, 255, 25 + (1 + math.sin(SysTime() * 6)) * 115)
 
-        render.DrawWireframeBox(center, angle_zero, min, max, color)
+        render.DrawWireframeBox(center, Angle(0, 0, 0), min, max, color)
 
         cam.Start2D()
             local centerScreen = center:ToScreen()
@@ -144,7 +142,12 @@ end
 
 function PLUGIN:EditClick()
     if (!self.editStart) then
-        self.editStart = LocalPlayer():GetEyeTraceNoCursor().HitPos
+        local pos = self:GetPlayerAreaTrace().HitPos
+        local snap = ix.option.Get("areaEditSnap", 8)
+        snap = snap == 0 and 0.1 or snap
+        pos = Vector(math.Round(pos.x / snap) * snap, math.Round(pos.y / snap) * snap, math.Round(pos.z / snap) * snap)
+        
+        self.editStart = pos
     elseif (self.editStart and !self.editProperties) then
         self.editProperties = true
 
@@ -154,16 +157,12 @@ function PLUGIN:EditClick()
 end
 
 function PLUGIN:EditReload()
-    if (self.editStart) then
-        return
-    end
+    if (self.editStart) then return end
 
     local id = LocalPlayer():GetArea()
     local area = ix.area.stored[id]
 
-    if (!area) then
-        return
-    end
+    if (!area) then return end
 
     Derma_Query(L("areaDeleteConfirm", id), L("areaDelete"),
         L("no"), nil,
@@ -176,14 +175,11 @@ function PLUGIN:EditReload()
 end
 
 function PLUGIN:ShouldDisplayArea(id)
-    if (ix.area.bEditing) then
-        return false
-    end
+    if (ix.area.bEditing) then return false end
 end
 
 function PLUGIN:OnAreaChanged(oldID, newID)
     local client = LocalPlayer()
-    client.ixArea = newID
 
     local area = ix.area.stored[newID]
 
@@ -194,9 +190,20 @@ function PLUGIN:OnAreaChanged(oldID, newID)
 
     client.ixInArea = true
 
-    if (hook.Run("ShouldDisplayArea", newID) == false or !area.properties.display) then
-        return
+    -- Play area entry sound when entering a new area
+    if (ix.config.Get("areaEntrySoundEnabled", true)) then
+        -- Use custom area sounds if defined, otherwise use default sounds
+        local entrySounds = area.properties.entrySounds or {
+            "ProjectParagon/GameSounds/scpcb/Ambient/ToZone2.ogg",
+            "ProjectParagon/GameSounds/scpcb/Ambient/ToZone3.ogg"
+        }
+        
+        if (istable(entrySounds) and #entrySounds > 0) then
+            surface.PlaySound(entrySounds[math.random(1, #entrySounds)])
+        end
     end
+
+    if (hook.Run("ShouldDisplayArea", newID) == false or !area.properties.display) then return end
 
     local format = newID .. (ix.option.Get("24hourTime", false) and ", %H:%M." or ", %I:%M %p.")
     format = ix.date.GetFormatted(format)
@@ -234,6 +241,8 @@ net.Receive("ixAreaRemove", function()
     if (ix.area.stored[name]) then
         ix.area.stored[name] = nil
     end
+
+    hook.Run("OnAreaRemove", name)
 end)
 
 net.Receive("ixAreaSync", function()
@@ -246,8 +255,14 @@ net.Receive("ixAreaSync", function()
         return
     end
 
-    // Set the list of texts to the ones provided by the server.
+    -- Set the list of texts to the ones provided by the server.
     ix.area.stored = util.JSONToTable(uncompressed)
+
+    if ( IsValid(ix.gui.developerMenu) ) then
+        ix.gui.developerMenu:PopulateTabs()
+    end
+
+    hook.Run("OnAreaSync")
 end)
 
 net.Receive("ixAreaChanged", function()

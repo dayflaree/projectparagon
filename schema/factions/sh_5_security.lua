@@ -5,7 +5,7 @@ FACTION.color = Color(50, 103, 182)
 FACTION.isDefault = false
 
 FACTION.models = {
-    "models/cpthazama/scp/guard.mdl",
+    "models/projectparagon/guard/guard.mdl",
 }
 
 function FACTION:ModifyPlayerStep(client, data)

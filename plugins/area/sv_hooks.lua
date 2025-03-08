@@ -1,3 +1,4 @@
+
 function PLUGIN:LoadData()
     hook.Run("SetupAreaProperties")
     ix.area.stored = self:GetData() or {}
@@ -27,12 +28,12 @@ function PLUGIN:PlayerInitialSpawn(client)
 end
 
 function PLUGIN:PlayerLoadedCharacter(client)
-    client.ixArea = ""
+    client:SetNetVar("area", "")
     client.ixInArea = nil
 end
 
 function PLUGIN:PlayerSpawn(client)
-    client.ixArea = ""
+    client:SetNetVar("area", "")
     client.ixInArea = nil
 end
 
@@ -40,9 +41,7 @@ function PLUGIN:AreaThink()
     for _, client in player.Iterator() do
         local character = client:GetCharacter()
 
-        if (!client:Alive() or !character) then
-            continue
-        end
+        if (!client:Alive() or !character) then continue end
 
         local overlappingBoxes = {}
         local position = client:GetPos() + client:OBBCenter()
@@ -58,8 +57,8 @@ function PLUGIN:AreaThink()
             local id = overlappingBoxes[1]
 
             if (oldID != id) then
-                hook.Run("OnPlayerAreaChanged", client, client.ixArea, id)
-                client.ixArea = id
+                hook.Run("OnPlayerAreaChanged", client, client:GetNetVar("area", id), id)
+                client:SetNetVar("area", id)
             end
 
             client.ixInArea = true
@@ -77,9 +76,7 @@ function PLUGIN:OnPlayerAreaChanged(client, oldID, newID)
 end
 
 net.Receive("ixAreaAdd", function(length, client)
-    if (!client:Alive() or !CAMI.PlayerHasAccess(client, "Helix - AreaEdit", nil)) then
-        return
-    end
+    if (!client:Alive() or !CAMI.PlayerHasAccess(client, "Helix - AreaEdit", nil)) then return end
 
     local id = net.ReadString()
     local type = net.ReadString()
@@ -97,9 +94,7 @@ net.Receive("ixAreaAdd", function(length, client)
     end
 
     for k, v in pairs(properties) do
-        if (!isstring(k) or !ix.area.properties[k]) then
-            continue
-        end
+        if (!isstring(k) or !ix.area.properties[k]) then continue end
 
         properties[k] = ix.util.SanitizeType(ix.area.properties[k].type, v)
     end
@@ -109,9 +104,7 @@ net.Receive("ixAreaAdd", function(length, client)
 end)
 
 net.Receive("ixAreaRemove", function(length, client)
-    if (!client:Alive() or !CAMI.PlayerHasAccess(client, "Helix - AreaEdit", nil)) then
-        return
-    end
+    if (!client:Alive() or !CAMI.PlayerHasAccess(client, "Helix - AreaEdit", nil)) then return end
 
     local id = net.ReadString()
 

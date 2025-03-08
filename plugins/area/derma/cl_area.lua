@@ -1,5 +1,4 @@
-
-// area entry
+-- area entry
 DEFINE_BASECLASS("Panel")
 local PANEL = {}
 
@@ -10,10 +9,8 @@ AccessorFunc(PANEL, "tickSoundRange", "TickSoundRange")
 AccessorFunc(PANEL, "backgroundAlpha", "BackgroundAlpha", FORCE_NUMBER)
 AccessorFunc(PANEL, "expireTime", "ExpireTime", FORCE_NUMBER)
 AccessorFunc(PANEL, "animationTime", "AnimationTime", FORCE_NUMBER)
-
-function PANEL:PlayTickSound()
-    LocalPlayer():EmitSound(self.tickSound, self.tickSoundRange[1], 100)
-end
+-- New accessor for entry sounds
+AccessorFunc(PANEL, "entrySounds", "EntrySounds")
 
 function PANEL:Init()
     self:DockPadding(4, 4, 4, 4)
@@ -24,27 +21,43 @@ function PANEL:Init()
     self.label:SetFont("ixMediumLightFont")
     self.label:SetTextColor(color_white)
     self.label:SetExpensiveShadow(1, color_black)
-    self.label:SetText("")
+    self.label:SetText("Area")
 
     self.text = ""
-    self.tickSound = "projectparagon/gamesounds/scpcb/ambient/tozone"..math.random(2, 3)..".ogg"
-    self.tickSoundRange = {190, 200}
+    self.tickSound = ix.config.Get("areaTickSound", "npc/roller/mine/rmine_chirp_ping1.wav")
+    self.tickSoundRange = {ix.config.Get("areaTickSoundMin", 190), ix.config.Get("areaTickSoundMax", 200)}
     self.backgroundAlpha = 255
-    self.expireTime = 8
+    self.expireTime = ix.config.Get("areaExpireTime", 8)
     self.animationTime = 2
+    
+    -- Default entry sounds, can be overridden
+    self.entrySounds = {
+        "ProjectParagon/GameSounds/scpcb/Ambient/ToZone2.ogg",
+        "ProjectParagon/GameSounds/scpcb/Ambient/ToZone3.ogg"
+    }
 
     self.character = 1
     self.createTime = RealTime()
     self.currentAlpha = 255
     self.currentHeight = 0
     self.nextThink = RealTime()
-
-    -- Play the sound as soon as the panel is initialized
-    self:PlayTickSound()
+    self.hasPlayedEntrySound = false
 end
 
-/*
+function PANEL:PlayEntrySound()
+    if self.entrySounds and #self.entrySounds > 0 then
+        local soundToPlay = self.entrySounds[math.random(1, #self.entrySounds)]
+        surface.PlaySound(soundToPlay)
+    end
+end
+
 function PANEL:Show()
+    -- Play entry sound immediately when the panel is going to be shown
+    if not self.hasPlayedEntrySound then
+        self:PlayEntrySound()
+        self.hasPlayedEntrySound = true
+    end
+
     self:CreateAnimation(0.5, {
         index = -1,
         target = {currentHeight = self.label:GetTall() + 8},
@@ -69,7 +82,13 @@ function PANEL:SetText(text)
     self.text = text
     self.character = 1
 end
-*/
+
+-- New function to set entry sounds
+function PANEL:SetEntrySounds(sounds)
+    if istable(sounds) and #sounds > 0 then
+        self.entrySounds = sounds
+    end
+end
 
 function PANEL:Think()
     local time = RealTime()
@@ -77,9 +96,11 @@ function PANEL:Think()
     if (time >= self.nextThink) then
         if (self.character < self.text:utf8len()) then
             self.character = self.character + 1
---          self.label:SetText(string.utf8sub(self.text, 1, self.character))
+            self.label:SetText(string.utf8sub(self.text, 1, self.character))
 
-            LocalPlayer():EmitSound(self.tickSound, 100)
+            if (ix.config.Get("areaTickSoundEnabled", true)) then
+                LocalPlayer():EmitSound(self.tickSound, 100, math.random(self.tickSoundRange[1], self.tickSoundRange[2]))
+            end
         end
 
         if (time >= self.createTime + self.expireTime and !self.bRemoving) then
@@ -104,9 +125,7 @@ function PANEL:Paint(width, height)
 end
 
 function PANEL:Remove()
-    if (self.bRemoving) then
-        return
-    end
+    if (self.bRemoving) then return end
 
     self:CreateAnimation(self.animationTime, {
         target = {currentAlpha = 0},
@@ -141,7 +160,7 @@ end
 
 vgui.Register("ixAreaEntry", PANEL, "Panel")
 
-// main panel
+-- main panel
 PANEL = {}
 
 function PANEL:Init()
@@ -156,7 +175,10 @@ function PANEL:Init()
     ix.gui.area = self
 end
 
-function PANEL:AddEntry(entry, color)
+function PANEL:AddEntry(entry, color, entrySounds)
+    if (!entry) then return end
+    if (!ix.config.Get("areaShowNotifications", true)) then return end
+
     color = color or ix.config.Get("color")
 
     local id = #self.entries + 1
@@ -168,6 +190,12 @@ function PANEL:AddEntry(entry, color)
     end
 
     panel:SetBackgroundColor(color)
+    
+    -- Set custom entry sounds if provided
+    if entrySounds and istable(entrySounds) then
+        panel:SetEntrySounds(entrySounds)
+    end
+    
     panel:SizeToContents()
     panel:Dock(BOTTOM)
     panel:Show()
@@ -189,3 +217,17 @@ function PANEL:GetEntries()
 end
 
 vgui.Register("ixArea", PANEL, "Panel")
+
+-- Hook into the area notification system to ensure sounds play when new areas are entered
+hook.Add("AreaEntered", "ixPlayAreaSound", function(client, area)
+    if CLIENT and client == LocalPlayer() and ix.gui.area then
+        -- Setup default sounds for the notification
+        local entrySounds = {
+            "ProjectParagon/GameSounds/scpcb/Ambient/ToZone2.ogg",
+            "ProjectParagon/GameSounds/scpcb/Ambient/ToZone3.ogg"
+        }
+        
+        -- Play a sound directly, in case the panel method doesn't work
+        surface.PlaySound(entrySounds[math.random(1, #entrySounds)])
+    end
+end)
