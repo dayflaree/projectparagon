@@ -1,2 +1,2 @@
-# paragon_scprp
-Project Paragon SCP Roleplay IX Schema
+# Project Paragon
+SCP: Containment Breach Roleplay
