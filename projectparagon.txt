@@ -1,0 +1,7 @@
+"projectparagon"
+{
+    "base"              "helix"
+    "title"             "Project Paragon"
+    "author"            "day"
+    "menusystem"        "1"
+}

@@ -30,8 +30,8 @@ PLUGIN.modelWhitelisted = {
     ["models/scp/map/gateb_fence_door.mdl"] = true
 }
 
-PLUGIN.overlayTextureButton = "90/projectparagon/ui/player/hud/hand_symbol1.png"
-PLUGIN.overlayTextureItem = "90/projectparagon/ui/player/hud/hand_symbol2.png"
+PLUGIN.overlayTextureButton = "projectparagon/gfx/handsymbol.png"
+PLUGIN.overlayTextureItem = "projectparagon/gfx/handsymbol2.png"
 
 if ( SERVER ) then return end
 

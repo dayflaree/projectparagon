@@ -23,7 +23,7 @@ function Schema:OnReloaded()
 
             for k, v in pairs(player.GetAll()) do
                 v:ChatNotify("[Paragon] Server has been refreshed!")
-                v:ConCommand("play", "projectparagon/gamesounds/scpcb/general/save1.ogg")
+                v:ConCommand("play", "projectparagon/sfx/General/Save1.ogg")
             end
 
             nextserverRefresh = CurTime() + 1
@@ -35,7 +35,7 @@ function Schema:OnReloaded()
             for k, v in pairs(player.GetAll()) do
                 ix.log.AddRaw("Client has been refreshed!")
                 v:ChatNotify("[Paragon] Client has been refreshed!")
-                RunConsoleCommand("play", "projectparagon/gamesounds/scpcb/general/save1.ogg")
+                RunConsoleCommand("play", "projectparagon/sfx/General/Save1.ogg")
             end
 
             nextclientRefresh = CurTime() + 1

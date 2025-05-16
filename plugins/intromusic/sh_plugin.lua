@@ -6,7 +6,7 @@ PLUGIN.author = "Riggs"
 PLUGIN.schema = "SCPRP"
 
 PLUGIN.introMusic = {
-    "projectparagon/gamesounds/scpcb/music/intro.ogg",
+    "projectparagon/sfx/Music/Intro.ogg",
 }
 
 ix.util.Include("cl_plugin.lua")

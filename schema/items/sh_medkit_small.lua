@@ -1,13 +1,13 @@
 -- Item Statistics
 
-ITEM.name = "Bandage"
-ITEM.description = "A small piece of cloth."
+ITEM.name = "Small Medical Kit"
+ITEM.description = "A small pack containing medical supplies."
 ITEM.category = "Medical Items"
 
 -- Item Configuration
 
-ITEM.model = "models/willardnetworks/skills/bandaid.mdl"
-ITEM.skin = 0
+ITEM.model = "models/mishka/models/firstaidkit.mdl"
+ITEM.skin = 1
 
 -- Item Inventory Size Configuration
 
@@ -16,11 +16,9 @@ ITEM.height = 1
 
 -- Item Custom Configuration
 
-ITEM.HealAmount = 10
-ITEM.Volume = 80
-ITEM.interactSounds = {
-	"ambient/levels/citadel/strange_talk9.wav"
-}
+ITEM.HealAmount = 40
+ITEM.Volume = 50
+
 -- Item Functions
 
 ITEM.functions.Apply = {
@@ -38,9 +36,7 @@ ITEM.functions.Apply = {
 	OnRun = function(itemTable)
 		local ply = itemTable.player
 		ply:SetHealth(math.min(ply:Health() + itemTable.HealAmount, ply:GetMaxHealth()))
-		ply:EmitSound("scprp/sfx/interact/pickitem2.mp3", itemTable.Volume)
-
-		ply:Notify("You applied a "..itemTable.name.." on yourself and you have gained health.")
+		ply:EmitSound("projectparagon/sfx/Interact/PickItem2.ogg", itemTable.Volume)
 	end
 }
 

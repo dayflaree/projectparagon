@@ -18,22 +18,7 @@ end
 
 function Schema:PlayerModelChanged(ply, model)
     if (not IsValid(ply) or ply:IsBot()) then return end
-
     ply:SetupHands()
-end
-
-function Schema:PlayerTick(ply)
-    local char = ply:GetCharacter()
-    if not (IsValid(ply) and ply:Alive() and char) then
-        return
-    end
-    if not ((ply.ixNextBreath or 0) < CurTime()) then
-        return
-    end
-    if (char:GetInventory():HasItem("face_gasmask", {["equip"] = true})) then
-        ply:EmitSound("minerva/global/breathing2.mp3", 60, nil, 0.2)
-        ply.ixNextBreath = CurTime() + math.random(4, 18)
-    end
 end
 
 function Schema:PlayerSpray()
@@ -54,20 +39,6 @@ end
 
 function Schema:PlayerSpawnVehicle(ply)
     return ply:IsAdmin()
-end
-
-function Schema:PlayerCanHearPlayersVoice(listener, talker)
-    for k, v in pairs(ents.FindByClass("ix_intercom")) do
-        if (talker:GetPos():DistToSqr(v:GetPos()) < 48440) then
-            for a, b in pairs(ents.FindByClass("ix_intercomhear")) do
-                if (listener:GetPos():DistToSqr(b:GetPos()) < 100000) then
-                    if (v:GetEnabled()) then
-                        return true
-                    end
-                end
-            end
-        end
-    end
 end
 
 function Schema:GetPlayerDeathSound(client)

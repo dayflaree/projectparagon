@@ -270,7 +270,8 @@ function PANEL:PaintOver(width, height)
 end
 
 
-local menublack = ix.util.GetMaterial("90/projectparagon/ui/menu/menu_black.png")
+local menublack = ix.util.GetMaterial("projectparagon/gfx/menu/menublack.png")
+
 function PANEL:ExtraPaint(width, height)
     surface.SetDrawColor(150, 150, 150, 255)
     surface.SetMaterial(menublack)

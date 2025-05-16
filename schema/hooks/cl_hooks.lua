@@ -1,5 +1,3 @@
--- Here is where all clientside hooks should go.
-
 function Schema:BuildBusinessMenu()
     return false
 end

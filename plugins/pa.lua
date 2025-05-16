@@ -11,51 +11,51 @@ ix.config.Add("paSystemEnabled", true, "Whether or not the PA System announcemen
 -- Configuration: List of announcements with audio files and chat messages
 PLUGIN.announcements = {
     {
-        sound = "projectparagon/gamesounds/scpcb/room/intro/pa/scripted/announcement1.ogg", -- Replace with your actual sound file path
+        sound = "projectparagon/sfx/Room/Intro/PA/scripted/announcement1.ogg", -- Replace with your actual sound file path
         message = "Don't forget, today is pizza day, so head on down to the cafeteria to grab yourself a hot slice!"
     },
     {
-        sound = "projectparagon/gamesounds/scpcb/room/intro/pa/scripted/announcement2.ogg",
+        sound = "projectparagon/sfx/Room/Intro/PA/scripted/announcement2.ogg",
         message = "Remember, security is the first step towards a safe work environment! Stay secure, stay vigilant."
     },
     {
-        sound = "projectparagon/gamesounds/scpcb/room/intro/pa/scripted/announcement3.ogg",
+        sound = "projectparagon/sfx/Room/Intro/PA/scripted/announcement3.ogg",
         message = "A reminder, to all personnel: Motivational seminars are held at the faculty auditorium from hours 17 to 18 on Thursdays! Come on down and get motivated!"
     },
     {
-        sound = "projectparagon/gamesounds/scpcb/room/intro/pa/scripted/announcement4.ogg",
+        sound = "projectparagon/sfx/Room/Intro/PA/scripted/announcement4.ogg",
         message = "Remember to report all suspicious activity to your supervisors. Not even you are exempt from scrutiny. Stay paranoid, stay vigilant."
     },
     {
-        sound = "projectparagon/gamesounds/scpcb/room/intro/pa/scripted/announcement5.ogg",
+        sound = "projectparagon/sfx/Room/Intro/PA/scripted/announcement5.ogg",
         message = "Feeling out of shape? Drop by the faculty gymnasium and feel free to participate in a game of community badminton on sundays!"
     },
     {
-        sound = "projectparagon/gamesounds/scpcb/room/intro/pa/scripted/announcement6.ogg",
+        sound = "projectparagon/sfx/Room/Intro/PA/scripted/announcement6.ogg",
         message = "Feel tired and overworked? Freshly brewed coffee is served at the cafeteria at all hours."
     },
     {
-        sound = "projectparagon/gamesounds/scpcb/room/intro/pa/scripted/announcement7.ogg",
+        sound = "projectparagon/sfx/Room/Intro/PA/scripted/announcement7.ogg",
         message = "Come down and join our annual movie night this saturday! This years film: 'Area 51: Panic and Terror 2 miles under'!"
     },
     {
-        sound = "projectparagon/gamesounds/scpcb/room/intro/pa/scripted/scripted1.ogg",
+        sound = "projectparagon/sfx/Room/Intro/PA/scripted/scripted1.ogg",
         message = "Attention, Security Chief Franklin. Please report to containment chamber 1-7-3 immediately."
     },
     {
-        sound = "projectparagon/gamesounds/scpcb/room/intro/pa/scripted/scripted2.ogg",
+        sound = "projectparagon/sfx/Room/Intro/PA/scripted/scripted2.ogg",
         message = "Doctor L. Please report to Heavy Containment Checkpoint C."
     },
     {
-        sound = "projectparagon/gamesounds/scpcb/room/intro/pa/scripted/scripted3.ogg",
+        sound = "projectparagon/sfx/Room/Intro/PA/scripted/scripted3.ogg",
         message = "Attention, Doctor Maynard. Report to administrations office immediately."
     },
     {
-        sound = "projectparagon/gamesounds/scpcb/room/intro/pa/scripted/scripted4.ogg",
+        sound = "projectparagon/sfx/Room/Intro/PA/scripted/scripted4.ogg",
         message = "Maintenance Crew Alpha, report to Light Containment elevator 6A for safety inspection."
     },
     {
-        sound = "projectparagon/gamesounds/scpcb/room/intro/pa/scripted/scripted5.ogg",
+        sound = "projectparagon/sfx/Room/Intro/PA/scripted/scripted5.ogg",
         message = "Attention, Site Director Rosewood. Please report to administration complex."
     }
     -- Add more announcements here as needed

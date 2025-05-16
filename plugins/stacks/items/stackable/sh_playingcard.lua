@@ -1,13 +1,13 @@
 -- Item Statistics
 
-ITEM.name = "Oxygen Canister"
-ITEM.description = "A canister of Oxygen gas."
+ITEM.name = "Playing Card"
+ITEM.description = "A King of Spades playing card."
 ITEM.category = "SCP-914"
 
 -- Item Configuration
 
-ITEM.model = "models/codeandmodeling/c/bombonne_gaz.mdl"
-ITEM.skin = 4
+ITEM.model = "models/mishka/models/keycard.mdl"
+ITEM.skin = 13
 
 -- Item Inventory Size Configuration
 
@@ -16,4 +16,4 @@ ITEM.height = 1
 
 -- Item Custom Configuration
 
-ITEM.maxStacks = 1
+ITEM.maxStacks = 0

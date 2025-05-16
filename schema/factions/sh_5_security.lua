@@ -3,7 +3,7 @@ FACTION.description = ""
 FACTION.color = Color(50, 103, 182)
 FACTION.isDefault = false
 FACTION.models = {
-    "models/projectparagon/guard/guard.mdl",
+    "models/cpthazama/scp/guard.mdl",
 }
 
 FACTION.radioConfig = {

@@ -66,7 +66,7 @@ if ( CLIENT ) then
     end
 
     function PLUGIN:OnCharacterMenuCreated(panel)
-        sound.PlayFile("sound/projectparagon/gamesounds/scpunity/music/loading_complete_music.wav", "noplay", function(channel, errorID, errorName)
+        sound.PlayFile("sound/projectparagon/sfx/Music/loading_complete_music.wav", "noplay", function(channel, errorID, errorName)
             if (errorID) then
                 MsgC(Color(255, 0, 0), "[Helix] Failed to play sound \""..errorName.."\".\n")
             else

@@ -13,7 +13,7 @@
 ix.char.RegisterVar("name", {
     field = "name",
     fieldType = ix.type.string,
-    default = "John Doe",
+    default = "John SCP",
     index = 1,
     OnValidate = function(self, value, payload, client)
         if (!value) then

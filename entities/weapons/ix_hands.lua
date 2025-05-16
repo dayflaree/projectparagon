@@ -41,7 +41,7 @@ SWEP.Instructions	= ""
 SWEP.HoldType				= "normal"
 SWEP.Category			    = "Other"
 
-SWEP.Spawnable              = true
+SWEP.Spawnable              = false
 SWEP.AdminSpawnable         = true
 
 SWEP.ViewModel              = ""

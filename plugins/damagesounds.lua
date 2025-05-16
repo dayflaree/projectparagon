@@ -7,16 +7,16 @@ PLUGIN.description = "Combines blood drip sounds based on health thresholds with
 -- Configuration for custom pain and death sounds
 PLUGIN.painSounds = {
     -- Add your custom pain sounds here
-    "projectparagon/gamesounds/terrorhunt/character/d9341/damage3.ogg",
-    "projectparagon/gamesounds/terrorhunt/character/d9341/damage4.ogg",
-    "projectparagon/gamesounds/terrorhunt/character/d9341/damage6.ogg",
-    "projectparagon/gamesounds/terrorhunt/character/d9341/damage7.ogg",
-    "projectparagon/gamesounds/terrorhunt/character/d9341/damage8.ogg",
+    "projectparagon/sfx/Character/D9341/Damage3.ogg",
+    "projectparagon/sfx/Character/D9341/Damage4.ogg",
+    "projectparagon/sfx/Character/D9341/Damage6.ogg",
+    "projectparagon/sfx/Character/D9341/Damage7.ogg",
+    "projectparagon/sfx/Character/D9341/Damage8.ogg",
 }
 
 PLUGIN.deathSounds = {
     -- Add your custom death sounds here
-    "projectparagon/gamesounds/terrorhunt/character/d9341/damage1.ogg",
+    "projectparagon/sfx/Character/D9341/Damage1.ogg",
 }
 
 -- Sound replacement settings
@@ -26,7 +26,7 @@ PLUGIN.deathChance = 100         -- Percentage chance to play death sounds (0-10
 
 -- Blood drip and decal configuration
 PLUGIN.bloodDripConfig = {
-    soundPath = "ProjectParagon/GameSounds/terrorhunt/Character/D9341/BloodDrip", -- Default sound path - can be changed to a custom sound
+    soundPath = "projectparagon/sfx/Character/D9341/BloodDrip", -- Default sound path - can be changed to a custom sound
     soundVariations = 4, -- Number of variations of the sound (drip1.wav, drip2.wav, etc.)
     volume = {
         [75] = 0.4, -- Volume at 75% health or below

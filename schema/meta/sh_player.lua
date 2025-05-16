@@ -28,14 +28,6 @@ function PLAYER:IsSiteDirector()
 	return self:Team() == FACTION_SITEDIRECTOR
 end
 
-function PLAYER:IsEthics()
-	return self:Team() == FACTION_ETHICS
-end
-
-function PLAYER:IsO5()
-	return self:Team() == FACTION_O5
-end
-
 function PLAYER:IsSCP()
 	return self:Team() == FACTION_SCP
 end

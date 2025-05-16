@@ -28,14 +28,6 @@ function CHAR:IsSiteDirector()
 	return self:GetFaction() == FACTION_SITEDIRECTOR
 end
 
-function CHAR:IsEthics()
-	return self:GetFaction() == FACTION_ETHICS
-end
-
-function CHAR:IsO5()
-	return self:GetFaction() == FACTION_O5
-end
-
 function CHAR:IsSCP()
 	return self:GetFaction() == FACTION_SCP
 end

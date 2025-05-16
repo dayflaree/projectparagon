@@ -1,4 +1,5 @@
-local menublack = ix.util.GetMaterial("90/projectparagon/ui/menu/menu_black.png")
+local menublack = ix.util.GetMaterial("projectparagon/gfx/menu/menublack.png")
+local menuwhite = ix.util.GetMaterial("projectparagon/gfx/menu/menuwhite.png")
 
 local animationTime = 1
 local matrixZScale = Vector(1, 1, 0.0001)

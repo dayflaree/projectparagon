@@ -2,7 +2,7 @@
 
 Schema.name = "Project Paragon"
 Schema.description = "SCP: Containment Breach Roleplay"
-Schema.author = "90"
+Schema.author = "day"
 
 -- Schema includes
 
@@ -15,7 +15,7 @@ ix.util.IncludeDir("meta")
 
 local config = {
     color = Color(255, 255, 255),
-    music = "projectparagon/ui/paragon_menu.mp3",
+    music = "projectparagon/sfx/Music/menu.mp3",
     communityURL = "",
     font = "Courier New",
     genericFont = "Courier New",

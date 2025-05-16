@@ -1,5 +1,5 @@
-local menu_background = ix.util.GetMaterial("90/projectparagon/ui/paragon_ui/paragon_menu_alt.png")
-local menu_image = ix.util.GetMaterial("90/projectparagon/ui/menu/scp_173_back.png")
+local menu_background = ix.util.GetMaterial("projectparagon/paragon/paragon_menu_alt.png")
+local menu_image = ix.util.GetMaterial("projectparagon/gfx/menu/173back.png")
 
 local gradient = surface.GetTextureID("vgui/gradient-d")
 local audioFadeInTime = 2

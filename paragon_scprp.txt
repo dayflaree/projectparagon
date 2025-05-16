@@ -1,7 +1,0 @@
-"paragon_scprp"
-{
-    "base"              "helix"
-    "title"             "Project Paragon - SCP: Containment Breach Roleplay"
-    "author"            "90"
-    "menusystem"        "1"
-}

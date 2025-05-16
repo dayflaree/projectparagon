@@ -1,5 +1,7 @@
 -- Here is where all clientside functions should go.
-local menu = ix.util.GetMaterial("90/projectparagon/ui/menu/menu_black.png")
+local menu = ix.util.GetMaterial("projectparagon/gfx/menu/menublack.png")
+local menuwhite = ix.util.GetMaterial("projectparagon/gfx/menu/menuwhite.png")
+
 function Schema:DrawFullOutlinedPanel(this, width, height)
     surface.SetDrawColor(255, 255, 255, 255)
     surface.SetMaterial(menu)
@@ -95,7 +97,7 @@ sound.Add({
     volume = 0.8,
     level = 80,
     pitch = 100,
-    sound = "projectparagon/gamesounds/scpcb/interact/button.ogg",
+    sound = "projectparagon/sfx/Interact/Button.ogg",
 })
 
 sound.Add({
@@ -104,7 +106,7 @@ sound.Add({
     volume = 0.2,
     level = 80,
     pitch = 100,
-    sound = "projectparagon/gamesounds/scpcb/interact/button2.ogg",
+    sound = "projectparagon/sfx/Interact/Button2.ogg",
 })
 
 surface.CreateFont("ParagonMenuButton", {

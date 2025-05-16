@@ -1,12 +1,12 @@
 -- Item Statistics
 
 ITEM.name = "SCP-500"
-ITEM.description = "A small container containing a red pill."
+ITEM.description = "A small red pill."
 ITEM.category = "Medical Items"
 
 -- Item Configuration
 
-ITEM.model = "models/willardnetworks/skills/pill_bottle.mdl"
+ITEM.model = "models/cpthazama/scp/500.mdl"
 ITEM.skin = 0
 
 -- Item Inventory Size Configuration
@@ -16,7 +16,7 @@ ITEM.height = 1
 
 -- Item Custom Configuration
 
-ITEM.HealAmount = 100
+ITEM.HealAmount = 99999
 ITEM.Volume = 80
 
 -- Item Functions
@@ -36,9 +36,7 @@ ITEM.functions.Apply = {
 	OnRun = function(itemTable)
 		local ply = itemTable.player
 		ply:SetHealth(math.min(ply:Health() + itemTable.HealAmount, ply:GetMaxHealth()))
-		ply:EmitSound("scprp/sfx/interact/pickitem2.mp3", itemTable.Volume)
-
-		ply:Notify("You applied a "..itemTable.name.." on yourself and you have gained health.")
+		ply:EmitSound("projectparagon/sfx/Interact/PickItem2.ogg", itemTable.Volume)
 	end
 }
 

@@ -1,22 +1,22 @@
 -- Item Statistics
 
-ITEM.name = "Large Medical Kit"
-ITEM.description = "A large pack containing medical supplies."
+ITEM.name = "Adrenaline"
+ITEM.description = "A syringe containing a serum."
 ITEM.category = "Medical Items"
 
 -- Item Configuration
 
-ITEM.model = "models/mishka/models/firstaidkit.mdl"
+ITEM.model = "models/mishka/models/syringe.mdl"
 ITEM.skin = 0
 
 -- Item Inventory Size Configuration
 
-ITEM.width = 2
-ITEM.height = 2
+ITEM.width = 1
+ITEM.height = 1
 
 -- Item Custom Configuration
 
-ITEM.HealAmount = 70
+ITEM.HealAmount = 15
 ITEM.Volume = 80
 
 -- Item Functions

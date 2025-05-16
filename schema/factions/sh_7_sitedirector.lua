@@ -5,7 +5,7 @@ FACTION.color = Color(255, 221, 0)
 FACTION.isDefault = false
 
 FACTION.models = {
-    "models/player/nick/scp/site_director/sd.mdl",
+    "models/cpthazama/scp/scientist.mdl",
 }
 
 function FACTION:OnCharacterCreated(ply, char)

@@ -1,5 +1,5 @@
-local menublack = ix.util.GetMaterial("90/projectparagon/ui/menu/menu_black.png")
-local menuwhite = ix.util.GetMaterial("90/projectparagon/ui/menu/menu_white.png")
+local menublack = ix.util.GetMaterial("projectparagon/gfx/menu/menublack.png")
+local menuwhite = ix.util.GetMaterial("projectparagon/gfx/menu/menuwhite.png")
 
 -- character load panel
 local PANEL = {}
