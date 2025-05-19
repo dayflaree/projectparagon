@@ -16,7 +16,7 @@ ix.util.IncludeDir("meta")
 local config = {
     color = Color(255, 255, 255),
     music = "projectparagon/sfx/Music/menu.mp3",
-    communityURL = "",
+    communityURL = "https://discord.gg/TrXY4sPcrJ",
     font = "Courier New",
     genericFont = "Courier New",
     intro = false,
@@ -36,7 +36,7 @@ local config = {
     maxCharacters = 4,
     inventoryHeight = 2,
     inventoryWidth = 5,
-    animMaxRate = 2,
+    animMaxRate = 1,
     walkSpeed = 80,
     runSpeed = 180,
     staminaDrain = 2.6,
@@ -50,16 +50,8 @@ end
 
 -- Schema playermodels
 
-player_manager.AddValidModel("Passive", "models/painkiller_76/sf2/classd/classd.mdl")
-player_manager.AddValidModel("Passive", "models/painkiller_76/sf2/clerk/clerk.mdl")
-player_manager.AddValidHands("Passive", "models/projectparagon/classd/d_class_player_vm.mdl", 0, "00000000")
-player_manager.AddValidModel("Combatant", "models/scpcbmultiplayer/dughoo/guardd.mdl")
-player_manager.AddValidModel("Combatant", "models/scpcbmultiplayer/dughoo/mtf.mdl")
-player_manager.AddValidModel("Combatant", "models/cpthazama/scp/ntf.mdl")
-player_manager.AddValidModel("Combatant", "models/scpcbmultiplayer/ghostsynthported/chaos.mdl")
-player_manager.AddValidHands("Combatant", "models/projectparagon/scp_combatant_vm.mdl", 0, "00000000")
-player_manager.AddValidModel("SCP-049", "models/painkiller_76/sf2/scp049/049_v2.mdl")
-player_manager.AddValidHands("SCP-049", "models/scp049upgrade/weapons/c_arms_scp049_upgrade.mdl", 0, "00000000")
+player_manager.AddValidModel("MTF", "models/cpthazama/scp/ntf.mdl")
+player_manager.AddValidHands("MTF", "models/player/thefunnymann/scp/ntf_arms.mdl", 0, "00000000")
 
 -- Schema flags
 

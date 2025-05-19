@@ -1,6 +1,6 @@
 local PLUGIN = PLUGIN or {}
-PLUGIN.name = "Voice Chat Indicator"
-PLUGIN.author = "Claude"
+PLUGIN.name = "Speaking Indicator"
+PLUGIN.author = "Day"
 PLUGIN.description = "Displays voice chat indicators for players, including when typing in chat"
 
 -- Configuration

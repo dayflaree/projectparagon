@@ -1,7 +1,7 @@
 local PLUGIN = PLUGIN
 
 PLUGIN.name = "Radio Sounds"
-PLUGIN.author = "Your Name"
+PLUGIN.author = "Day"
 PLUGIN.description = "Plays radio sounds when players use voice or text chat for configured factions."
 
 -- Register network messages at the earliest possible point
