@@ -1,18 +1,8 @@
-
 ITEM.name = "Bodygroup Clothing"
 ITEM.model = Model("models/props_c17/BriefCase001a.mdl")
 ITEM.description = "A generic piece of clothing."
 
 if (CLIENT) then
-    local vignette = Material("helix/gui/vignette.png")
-    function ITEM:PaintOver(item, w, h)
-        if (item:GetData("equip")) then
-            surface.SetMaterial(vignette)
-            surface.SetDrawColor(110, 255, 110, 10)
-            surface.DrawTexturedRect(1, 1, w - 2, h - 2)
-        end
-    end
-
     function ITEM:PopulateTooltip(tooltip)
         if (self:GetData("equip")) then
             local name = tooltip:GetRow("name")
@@ -74,6 +64,8 @@ function ITEM:RemoveOutfit(ply)
             end
         end
     end
+
+    ply:EmitSound("projectparagon/sfx/Interact/PickItem2.ogg")
 end
 
 ITEM:Hook("drop", function(item)
@@ -116,8 +108,6 @@ ITEM.functions.EquipUn = {
             end
         end
 
-        item.player:EmitSound("reinstated/unequip.mp3", 70, math.random(90,110))
-        
         return false
     end,
     OnCanRun = function(item)
@@ -205,7 +195,7 @@ ITEM.functions.Equip = {
             end
         end
 
-        item.player:EmitSound("reinstated/equip.mp3", 70, math.random(90,110))
+        ply:EmitSound("projectparagon/sfx/Interact/PickItem2.ogg")
 
         return false
     end,

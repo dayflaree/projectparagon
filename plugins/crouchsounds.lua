@@ -6,13 +6,13 @@ PLUGIN.description = "Plays a random sound when players crouch."
 -- Configuration: List of sound files to play when crouching
 PLUGIN.crouchSounds = {
     -- Add your custom crouch sounds here
-    "ProjectParagon/GameSounds/terrorhunt/Character/D9341/crouch0.ogg",
-    "ProjectParagon/GameSounds/terrorhunt/Character/D9341/crouch1.ogg",
-    "ProjectParagon/GameSounds/terrorhunt/Character/D9341/crouch2.ogg",
-    "ProjectParagon/GameSounds/terrorhunt/Character/D9341/crouch3.ogg",
-    "ProjectParagon/GameSounds/terrorhunt/Character/D9341/crouch4.ogg",
-    "ProjectParagon/GameSounds/terrorhunt/Character/D9341/crouch5.ogg",
-    "ProjectParagon/GameSounds/terrorhunt/Character/D9341/crouch6.ogg"
+    "projectparagon/sfx/Character/D9341/crouch0.ogg",
+    "projectparagon/sfx/Character/D9341/crouch1.ogg",
+    "projectparagon/sfx/Character/D9341/crouch2.ogg",
+    "projectparagon/sfx/Character/D9341/crouch3.ogg",
+    "projectparagon/sfx/Character/D9341/crouch4.ogg",
+    "projectparagon/sfx/Character/D9341/crouch5.ogg",
+    "projectparagon/sfx/Character/D9341/crouch6.ogg"
 }
 
 -- Configuration options

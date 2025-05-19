@@ -23,7 +23,7 @@ if CLIENT then
     -- Create materials and fonts when the plugin initializes
     function PLUGIN:InitPostEntity()
         -- Create microphone icon material
-        self.micIcon = Material("90/projectparagon/ui/icons/scpcb/hud_textures/micicon.png")
+        self.micIcon = Material("projectparagon/gfx/menu/player/va.png")
         
         -- Ensure the font exists
         self.thirdPersonFont = self.config.thirdPersonText.font
@@ -74,7 +74,7 @@ if CLIENT then
         -- Draw first-person mic icon (for both voice and typing)
         if self.config.firstPersonIcon.enabled then
             if not self.micIcon or self.micIcon:IsError() then
-                self.micIcon = Material("90/projectparagon/ui/icons/scpcb/hud_textures/micicon.png")
+                self.micIcon = Material("projectparagon/gfx/menu/player/va.png")
                 if self.micIcon:IsError() then
                     if self.voiceStates[client] then
                         local size = self.config.firstPersonIcon.size

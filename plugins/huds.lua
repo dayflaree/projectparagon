@@ -6,10 +6,6 @@ PLUGIN.author = "pkz.0z"
 
 PLUGIN.HUDScale = 1.0
 
--- This might be a lil bit messy but I'm adding more shit in to it. Any code that looks a lil bit silly I will fix up!!! Do not touch unless I've made a retarded error 
--- edit: raaaa i can already see this shits ordered bad but fuck it idk how to reorder it
--- edit 2: should basically be working now.
-
 if not ( CLIENT ) then return end
 
 surface.CreateFont("NTFHudFont", {
@@ -71,7 +67,7 @@ function PLUGIN:DrawNTFHud(ply, gall)
         local height = 30 * PLUGIN.HUDScale
 
         surface.SetDrawColor(color)
-        surface.SetMaterial(Material("90/projectparagon/ui/player/hud/scoreboard.png"))
+        surface.SetMaterial(Material("projectparagon/paragon/scoreboard.png"))
         surface.DrawTexturedRect(x, y, width, height)
 
         local textHeight = draw.GetFontHeight("NTFHudFont")

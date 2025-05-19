@@ -16,9 +16,9 @@ FACTION.radioConfig = {
 function FACTION:ModifyPlayerStep(client, data)
 
     local ciSounds = {
-        "ProjectParagon/GameSounds/scpcb/Character/MTF/Step1.ogg",
-        "ProjectParagon/GameSounds/scpcb/Character/MTF/Step2.ogg",
-        "ProjectParagon/GameSounds/scpcb/Character/MTF/Step3.ogg"
+        "projectparagon/sfx/Character/MTF/Step1.ogg",
+        "projectparagon/sfx/Character/MTF/Step2.ogg",
+        "projectparagon/sfx/Character/MTF/Step3.ogg"
     }
     
     local chosenSound = ciSounds[math.random(#ciSounds)]

@@ -194,8 +194,8 @@ function PLUGIN:OnAreaChanged(oldID, newID)
     if (ix.config.Get("areaEntrySoundEnabled", true)) then
         -- Use custom area sounds if defined, otherwise use default sounds
         local entrySounds = area.properties.entrySounds or {
-            "ProjectParagon/GameSounds/scpcb/Ambient/ToZone2.ogg",
-            "ProjectParagon/GameSounds/scpcb/Ambient/ToZone3.ogg"
+            "projectparagon/sfx/Ambient/ToZone2.ogg",
+            "projectparagon/sfx/Ambient/ToZone3.ogg"
         }
         
         if (istable(entrySounds) and #entrySounds > 0) then

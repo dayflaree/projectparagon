@@ -12,13 +12,5 @@ ITEM.allowedModels = {
     "models/cpthazama/scp/janitor.mdl",
     "models/cpthazama/scp/doctor/doctor.mdl",
     "models/cpthazama/scp/scientist.mdl",
-    "models/painkiller_76/sf2/clerk/clerk.mdl",
-    "models/cpthazama/scp/guard.mdl",
-    "models/cpthazama/scp/lambda.mdl",
-    "models/cpthazama/scp/ntf.mdl",
-    "models/cpthazama/scp/nu.mdl",
-    "models/cpthazama/scp/sneguard.mdl",
-    "models/cpthazama/scp/chaosp90.mdl",
-    "models/cpthazama/scp/chaos.mdl",
-    "models/cpthazama/scp/guard_old.mdl"
+    "models/painkiller_76/sf2/clerk/clerk.mdl"
 }
