@@ -1,7 +1,7 @@
 "projectparagon"
 {
     "base"              "helix"
-    "title"             "Project Paragon"
+    "title"             "SCP: Containment Breach"
     "author"            "day"
     "menusystem"        "1"
 }
