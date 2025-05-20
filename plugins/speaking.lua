@@ -98,3 +98,13 @@ if SERVER then
         end
     end)
 end
+
+-- Example of faction configuration in your schema.lua or faction file
+--[[
+FACTION.radioConfig = {
+    startVoice = "npc/combine_soldier/vo/on1.wav",
+    endVoice = "npc/combine_soldier/vo/off3.wav",
+    startTyping = "npc/overwatch/radiovoice/on2.wav",
+    endTyping = "buttons/button17.wav"
+}
+]]

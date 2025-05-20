@@ -1,6 +1,6 @@
 PLUGIN = PLUGIN or {} -- Initialize PLUGIN globally for server-side and metadata
-PLUGIN.name = "Forced Configuration"
-PLUGIN.author = "Day"
+PLUGIN.name = "View Configuration"
+PLUGIN.author = "Your Name"
 PLUGIN.description = "Adds server configuration options to forcefully enable smoothView and disableAnimations."
 
 -- Add server-side configurations

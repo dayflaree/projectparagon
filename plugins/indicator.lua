@@ -8,7 +8,7 @@ PLUGIN.config = {
     firstPersonIcon = {
         enabled = true,
         size = 42,
-        position = {x = 29, y = 149} -- Offset from bottom right
+        position = {x = 20, y = 20} -- Offset from bottom right
     },
     thirdPersonText = {
         enabled = true,
