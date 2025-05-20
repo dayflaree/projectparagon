@@ -110,7 +110,105 @@ sound.Add({
 })
 
 surface.CreateFont("ParagonMenuButton", {
-    font = "Courier New", -- You can use other font names if needed
-    size = 56,      -- Set the size (scale) of the font here
+    font = "Courier New",
+    size = 56,
     weight = 500,
 })
+
+
+local SCHEMA = Schema
+SCHEMA.UI = SCHEMA.UI or {}
+SCHEMA.UI.Fonts = SCHEMA.UI.Fonts or {}
+SCHEMA.UI.BaseFontName = "Courier New"
+
+function SCHEMA.UI:RegisterFont(name, data)
+    surface.CreateFont(name, data)
+    SCHEMA.UI.Fonts[name] = {
+        name = name,
+        data = data,
+    }
+end
+
+function SCHEMA.UI:LoadCustomFonts()
+    MsgC(ix.config.Get("color", Color(0, 150, 255)), "[Paragon UI] Loading custom fonts...\n")
+
+    for i = 1, 15 do
+        local size = i * 5
+        SCHEMA.UI:RegisterFont("ParagonFont_Elements_"..size, {
+            font = SCHEMA.UI.BaseFontName,
+            size = size,
+            antialias = true,
+        })
+
+        SCHEMA.UI:RegisterFont("ParagonFont_Elements_Italic_"..size, {
+            font = SCHEMA.UI.BaseFontName,
+            size = size,
+            antialias = true,
+            italic = true,
+        })
+
+        SCHEMA.UI:RegisterFont("ParagonFont_Elements_Bold_"..size, {
+            font = SCHEMA.UI.BaseFontName,
+            size = size,
+            antialias = true,
+            weight = 1000,
+        })
+    end
+
+    for i = 3, 20 do
+        local scaledSize = ScreenScale(i * 2)
+        SCHEMA.UI:RegisterFont("ParagonFont_Elements_ScreenScale_".. (i*2), {
+            font = SCHEMA.UI.BaseFontName,
+            size = scaledSize,
+            antialias = true,
+        })
+
+        SCHEMA.UI:RegisterFont("ParagonFont_Elements_Italic_ScreenScale_".. (i*2), {
+            font = SCHEMA.UI.BaseFontName,
+            size = scaledSize,
+            antialias = true,
+            italic = true,
+        })
+
+        SCHEMA.UI:RegisterFont("ParagonFont_Elements_Bold_ScreenScale_".. (i*2), {
+            font = SCHEMA.UI.BaseFontName,
+            size = scaledSize,
+            antialias = true,
+            weight = 1000,
+        })
+    end
+
+    MsgC(ix.config.Get("successColor", Color(0, 255, 0)), "[Paragon UI] Custom fonts loaded.\n")
+end
+
+hook.Add("OnCharacterMenuCreated", "Paragon_PlayCharMenuMusic", function(panel)
+    sound.PlayFile("sound/projectparagon/sfx/Music/loading_complete_music.wav", "noplay", function(channel, errorID, errorName)
+        if (channel) then
+            channel:SetVolume(ix.config.Get("musicVolume", 0.5))
+            channel:Play()
+        elseif (errorID) then
+            MsgC(ix.config.Get("errorColor", Color(255, 0, 0)), "[Paragon UI] Failed to play character menu sound: \""..errorName.."\". Error ID: "..errorID.."\n")
+        end
+    end)
+end)
+
+concommand.Add("paragon_loadfonts", function()
+    SCHEMA.UI:LoadCustomFonts()
+end)
+
+concommand.Add("paragon_getfonts", function()
+    MsgC(ix.config.Get("color", Color(0, 150, 255)), "[Paragon UI] Stored Custom Fonts:\n")
+    if (SCHEMA.UI.Fonts and table.Count(SCHEMA.UI.Fonts) > 0) then
+        for fontName, fontData in SortedPairs(SCHEMA.UI.Fonts) do
+            MsgC(color_white, " - " .. fontName .. " (Size: " .. fontData.data.size .. ")\n")
+        end
+    else
+        MsgC(color_white, "No custom fonts currently stored or loaded by Paragon UI.\n")
+    end
+end)
+
+if (SCHEMA.UI.LoadCustomFonts) then
+    SCHEMA.UI:LoadCustomFonts()
+else
+    MsgC(ix.config.Get("errorColor", Color(255,0,0)), "[Paragon UI] Error: LoadCustomFonts function not found!\n")
+end
