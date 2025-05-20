@@ -31,7 +31,6 @@ local config = {
     chatListenColor = Color(107, 193, 78),
     paSystemEnabled = true,
     allowBusiness = false,
-    runClassHook = true,
     runRankHook = true,
     maxCharacters = 4,
     inventoryHeight = 2,
