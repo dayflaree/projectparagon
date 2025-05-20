@@ -1,6 +1,5 @@
 FACTION.name = "Chaos Insurgency"
-FACTION.description = ""
-FACTION.color = Color(46, 46, 46)
+FACTION.color = Color(111, 112, 76)
 FACTION.isDefault = false
 FACTION.models = {
     "models/cpthazama/scp/chaos.mdl",
@@ -28,6 +27,27 @@ function FACTION:ModifyPlayerStep(client, data)
     data.volume = volume
 
     return false
+end
+
+FACTION.defaultHealth = 100
+FACTION.maxHealth = 100
+FACTION.defaultArmor = 100
+FACTION.maxArmor = 200
+
+function FACTION:OnCharacterCreated(ply, char)
+    char:SetName("CON. "..char:GetName())
+    char:SetRank(RANK_CI_CONSCRIPT)
+end
+
+function FACTION:OnSpawn(client)
+    timer.Simple(0.1, function()
+        if not IsValid(client) then return end
+
+        client:SetHealth(math.min(self.defaultHealth or 100, self.maxHealth or 100))
+        client:SetMaxHealth(self.maxHealth or 100)
+
+        client:SetArmor(math.min(self.defaultArmor or 0, self.maxArmor or 100))
+    end)
 end
 
 FACTION_CI = FACTION.index

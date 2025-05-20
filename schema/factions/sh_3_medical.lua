@@ -1,11 +1,22 @@
 FACTION.name = "Medical Department"
-FACTION.description = ""
-FACTION.color = Color(186, 247, 216)
-
+FACTION.color = Color(224, 227, 255)
 FACTION.isDefault = false
+FACTION.models = {"models/cpthazama/scp/doctor/doctor.mdl"}
 
-FACTION.models = {
-    "models/cpthazama/scp/doctor/doctor.mdl"
-}
+FACTION.defaultHealth = 100
+FACTION.maxHealth = 100
+FACTION.defaultArmor = 100
+FACTION.maxArmor = 200
+
+function FACTION:OnSpawn(client)
+    timer.Simple(0.1, function()
+        if not IsValid(client) then return end
+
+        client:SetHealth(math.min(self.defaultHealth or 100, self.maxHealth or 100))
+        client:SetMaxHealth(self.maxHealth or 100)
+
+        client:SetArmor(math.min(self.defaultArmor or 0, self.maxArmor or 100))
+    end)
+end
 
 FACTION_MEDICAL = FACTION.index

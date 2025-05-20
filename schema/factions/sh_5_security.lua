@@ -1,6 +1,5 @@
 FACTION.name = "Security Department"
-FACTION.description = ""
-FACTION.color = Color(50, 103, 182)
+FACTION.color = Color(199, 199, 199)
 FACTION.isDefault = false
 FACTION.models = {
     "models/cpthazama/scp/guard.mdl",
@@ -28,6 +27,27 @@ function FACTION:ModifyPlayerStep(client, data)
     data.volume = volume
 
     return false
+end
+
+FACTION.defaultHealth = 100
+FACTION.maxHealth = 100
+FACTION.defaultArmor = 100
+FACTION.maxArmor = 200
+
+function FACTION:OnCharacterCreated(ply, char)
+    char:SetName("JSO. "..char:GetName())
+    char:SetRank(RANK_SECURITY_JUNIOR)
+end
+
+function FACTION:OnSpawn(client)
+    timer.Simple(0.1, function()
+        if not IsValid(client) then return end
+
+        client:SetHealth(math.min(self.defaultHealth or 100, self.maxHealth or 100))
+        client:SetMaxHealth(self.maxHealth or 100)
+
+        client:SetArmor(math.min(self.defaultArmor or 0, self.maxArmor or 100))
+    end)
 end
 
 FACTION_SECURITY = FACTION.index

@@ -22,3 +22,50 @@ ITEM.allowedModels = {
     "models/cpthazama/scp/chaos.mdl",
     "models/cpthazama/scp/guard_old.mdl"
 }
+
+local absorbingFactions = {
+    [FACTION_MTF] = true,
+    [FACTION_SECURITY] = true,
+    [FACTION_CI] = true
+}
+
+ITEM.functions.Equip = {
+    name = "Equip",
+    tip = "equipTip",
+    icon = "icon16/tick.png",
+    OnRun = function(item)
+        local ply = item.player
+        local char = ply and ply:GetCharacter()
+
+        if not IsValid(ply) or not char then return false end
+
+        -- Check if player's faction is in the auto-absorb list
+        if absorbingFactions[char:GetFaction()] then
+            local armorBoost = item.maxArmor or 100
+            ply:SetArmor(ply:Armor() + armorBoost)
+            ply:EmitSound("projectparagon/sfx/Interact/PickUpKevlar.ogg")
+            return true
+        end
+
+        -- Default equip logic
+        local items = char:GetInventory():GetItems()
+        for _, v in pairs(items) do
+            if v.id != item.id and v.outfitCategory == item.outfitCategory and v:GetData("equip") then
+                ply:NotifyLocalized(item.equippedNotify or "outfitAlreadyEquipped")
+                return false
+            end
+        end
+
+        item:SetData("equip", true)
+
+        if item.maxArmor then
+            ply:SetArmor(item:GetData("armor", item.maxArmor))
+        end
+
+        return false
+    end,
+    OnCanRun = function(item)
+        local ply = item.player
+        return !IsValid(item.entity) and IsValid(ply) and item:GetData("equip") != true and item:CanEquipOutfit()
+    end
+}

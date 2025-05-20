@@ -5,15 +5,15 @@ ITEM.description = "A generic piece of clothing."
 if (CLIENT) then
     function ITEM:PopulateTooltip(tooltip)
         if (self:GetData("equip")) then
-            local name = tooltip:GetRow("name")
-            name:SetBackgroundColor(derma.GetColor("Success", tooltip))
+            --local name = tooltip:GetRow("name")
+            --name:SetBackgroundColor(derma.GetColor("Success", tooltip))
         end
 
         if (self.maxArmor) then
-            local panel = tooltip:AddRowAfter("name", "armor")
-            panel:SetBackgroundColor(derma.GetColor("Warning", tooltip))
-            panel:SetText("Armor: " .. (self:GetData("equip") and LocalPlayer():Armor() or self:GetData("armor", self.maxArmor)))
-            panel:SizeToContents()
+            --local panel = tooltip:AddRowAfter("name", "armor")
+            --panel:SetBackgroundColor(derma.GetColor("Warning", tooltip))
+            --panel:SetText("Armor: " .. (self:GetData("equip") and LocalPlayer():Armor() or self:GetData("armor", self.maxArmor)))
+            --panel:SizeToContents()
         end
     end
 end
@@ -64,8 +64,6 @@ function ITEM:RemoveOutfit(ply)
             end
         end
     end
-
-    ply:EmitSound("projectparagon/sfx/Interact/PickItem2.ogg")
 end
 
 ITEM:Hook("drop", function(item)
@@ -194,8 +192,6 @@ ITEM.functions.Equip = {
                 end
             end
         end
-
-        ply:EmitSound("projectparagon/sfx/Interact/PickItem2.ogg")
 
         return false
     end,

@@ -180,14 +180,7 @@ function PANEL:Init()
         if (self.bUsingCharacter) then
             parent:Close()
         else
-            Derma_Query("Are you sure you want to leave?", "Helix",
-                "Yes", function()
-                    self:Dim(2, function()
-                        RunConsoleCommand("disconnect")
-                    end)
-                end,
-                "No", function() end
-            )
+            RunConsoleCommand("disconnect")
         end
     end
 

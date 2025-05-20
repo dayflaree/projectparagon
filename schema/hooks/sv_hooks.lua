@@ -48,3 +48,23 @@ end
 function Schema:GetPlayerPainSound(client)
     return
 end
+
+hook.Add("Think", "ClampFactionHealthAndArmor", function()
+    for _, ply in ipairs(player.GetAll()) do
+        local char = ply:GetCharacter()
+        if not char then continue end
+
+        local faction = ix.faction.indices[char:GetFaction()]
+        if not faction then continue end
+
+        -- Clamp Health
+        if faction.maxHealth and ply:Health() > faction.maxHealth then
+            ply:SetHealth(faction.maxHealth)
+        end
+
+        -- Clamp Armor
+        if faction.maxArmor and ply:Armor() > faction.maxArmor then
+            ply:SetArmor(faction.maxArmor)
+        end
+    end
+end)
