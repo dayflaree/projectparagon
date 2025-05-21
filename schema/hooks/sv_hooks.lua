@@ -168,3 +168,109 @@ hook.Add("ixItemRemoved", "Paragon_ArmorOverride_ItemRemoved", function(client, 
         end)
     end
 end)
+
+local ammoListForSaving = {}
+
+local function RegisterAmmoForSaving(name)
+    name = name:lower()
+    if (!table.HasValue(ammoListForSaving, name)) then
+        ammoListForSaving[#ammoListForSaving + 1] = name
+    end
+end
+
+RegisterAmmoForSaving("ar2")
+RegisterAmmoForSaving("pistol")
+RegisterAmmoForSaving("357")
+RegisterAmmoForSaving("smg1")
+RegisterAmmoForSaving("xbowbolt")
+RegisterAmmoForSaving("buckshot")
+RegisterAmmoForSaving("rpg_round")
+RegisterAmmoForSaving("smg1_grenade")
+RegisterAmmoForSaving("grenade")
+RegisterAmmoForSaving("ar2altfire")
+RegisterAmmoForSaving("slam")
+RegisterAmmoForSaving("alyxgun")
+RegisterAmmoForSaving("sniperround")
+RegisterAmmoForSaving("sniperpenetratedround")
+RegisterAmmoForSaving("thumper")
+RegisterAmmoForSaving("gravity")
+RegisterAmmoForSaving("battery")
+RegisterAmmoForSaving("gaussenergy")
+RegisterAmmoForSaving("combinecannon")
+RegisterAmmoForSaving("airboatgun")
+RegisterAmmoForSaving("striderminigun")
+RegisterAmmoForSaving("helicoptergun")
+
+local raiseAllWeapons_Bypass = {
+    ["ix_hands"] = true,
+}
+
+if (_G.ALWAYS_RAISED == nil) then
+    _G.ALWAYS_RAISED = {}
+elseif (type(_G.ALWAYS_RAISED) ~= "table") then
+     _G.ALWAYS_RAISED = {}
+end
+
+local HOOKS = {}
+
+function HOOKS:CharacterPreSave(character)
+    local client = character:GetPlayer()
+
+    if (IsValid(client)) then
+        local ammoTable = {}
+
+        for _, ammoType in ipairs(ammoListForSaving) do
+            local ammoCount = client:GetAmmoCount(ammoType)
+
+            if (ammoCount > 0) then
+                ammoTable[ammoType] = ammoCount
+            end
+        end
+
+        character:SetData("ammo", ammoTable)
+    end
+end
+
+function HOOKS:PlayerLoadedCharacter(client)
+    timer.Simple(0.25, function()
+        if (!IsValid(client)) then
+            return
+        end
+
+        local character = client:GetCharacter()
+        if (!character) then
+            return
+        end
+
+        local ammoTable = character:GetData("ammo")
+
+        if (ammoTable and type(ammoTable) == "table") then
+            for ammoType, ammoCount in pairs(ammoTable) do
+                client:SetAmmo(ammoCount, tostring(ammoType))
+            end
+        end
+    end)
+end
+
+function HOOKS:PostPlayerLoadout(ply)
+    timer.Simple(0.1, function()
+        if (IsValid(ply)) then
+            ply:StripWeapon("ix_keys")
+        end
+    end)
+end
+
+function HOOKS:PlayerSwitchWeapon(ply, oldWep, newWep)
+    if not (IsValid(newWep) and type(newWep.GetClass) == "function") then
+        return
+    end
+
+    local newWepClass = newWep:GetClass()
+
+    if (raiseAllWeapons_Bypass[newWepClass]) then
+        return
+    end
+    _G.ALWAYS_RAISED[newWepClass] = true
+end
+
+return HOOKS

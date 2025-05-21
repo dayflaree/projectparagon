@@ -46,8 +46,8 @@ function ENT:Think()
     end
     local targetDist = 80 
     local cageHeightRelativeToPlayerOrigin = 5 
-    local positionFollowSpeed = 3   
-    local angleFollowSpeed = 1.5    
+    local positionFollowSpeed = 1
+    local angleFollowSpeed = 1.2
     local ownerPos = owner:GetPos()
     local playerBodyAngles = owner:GetAngles() 
     local bodyForwardVector = Angle(0, playerBodyAngles.y, 0):Forward()
@@ -90,25 +90,26 @@ function ENT:ReleaseSCP(releasePos, playerToReceiveItem)
         end
     end
 
-    if IsValid(playerToReceiveItem) and playerToReceiveItem:IsPlayer() and playerToReceiveItem:Alive() then
-        if (playerToReceiveItem.GiveItem and type(playerToReceiveItem.GiveItem) == "function") then
-            local itemTable = playerToReceiveItem:GiveItem("scp173_containment_cage")
-            if itemTable then
-                playerToReceiveItem:Notify("SCP-173 released. Containment cage returned.")
-            else
-                playerToReceiveItem:Notify("SCP-173 released. Error returning cage item (inventory full or already have one?).")
-            end
-        else
-            local plyByID = Player(playerToReceiveItem:UserID())
-            if IsValid(plyByID) and plyByID:IsPlayer() and plyByID.GiveItem then
-                local itemTable = plyByID:GiveItem("scp173_containment_cage")
-                if itemTable then plyByID:Notify("SCP-173 released. Cage returned (fallback).") else plyByID:Notify("SCP-173 released. Cage return error (fallback).") end
-            end
-        end
-    end
+    -- if IsValid(playerToReceiveItem) and playerToReceiveItem:IsPlayer() and playerToReceiveItem:Alive() then
+    --     if (playerToReceiveItem.GiveItem and type(playerToReceiveItem.GiveItem) == "function") then
+    --         local itemTable = playerToReceiveItem:GiveItem("scp173_containment_cage")
+    --         if itemTable then
+    --             playerToReceiveItem:Notify("SCP-173 released. Containment cage returned.")
+    --         else
+    --             playerToReceiveItem:Notify("SCP-173 released. Error returning cage item (inventory full or already have one?).")
+    --         end
+    --     else
+    --         local plyByID = Player(playerToReceiveItem:UserID())
+    --         if IsValid(plyByID) and plyByID:IsPlayer() and plyByID.GiveItem then
+    --             local itemTable = plyByID:GiveItem("scp173_containment_cage")
+    --             if itemTable then plyByID:Notify("SCP-173 released. Cage returned (fallback).") else plyByID:Notify("SCP-173 released. Cage return error (fallback).") end
+    --         end
+    --     end
+    -- end
 
     -- Final action: Remove the cage entity
     if IsValid(self) then -- Check IsValid one last time before calling Remove
+        self:EmitSound("projectparagon/sfx/Door/BigDoorStartsOpenning.ogg") 
         self:Remove()
     end
 end
