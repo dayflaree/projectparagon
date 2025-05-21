@@ -6,13 +6,12 @@ FACTION.models = {
 }
 
 FACTION.radioConfig = {
-    startVoice = "ProjectParagon/Player/radio_beep1.mp3",
-    endVoice = "ProjectParagon/Player/radio_beep3.mp3",
-    startTyping = "ProjectParagon/Player/radio_beep1.mp3",
-    endTyping = "ProjectParagon/Player/radio_beep3.mp3"
+    startVoice = "projectparagon/sfx/Character/MTF/radio_beep1.mp3",
+    endVoice = "projectparagon/sfx/Character/MTF/radio_beep2.mp3",
+    startTyping = "projectparagon/sfx/Character/MTF/radio_beep1.mp3",
+    endTyping = "projectparagon/sfx/Character/MTF/radio_beep2.mp3",
 }
 
--- Override for footstep sounds
 function FACTION:ModifyPlayerStep(client, data)
     local mtfSounds = {
         "projectparagon/sfx/Character/MTF/Step1.ogg",

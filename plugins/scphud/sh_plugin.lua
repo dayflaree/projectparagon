@@ -30,7 +30,6 @@ PLUGIN.overlayWhitelistedModels = {
     ["models/scp/map/079_fence_door.mdl"]   = true,
     ["models/scp/map/fence_door.mdl"]       = true,
     ["models/scp/map/gateb_fence_door.mdl"] = true,
-    ["models/scp/map/door02.mdl"]           = true,
 }
 
 if SERVER then

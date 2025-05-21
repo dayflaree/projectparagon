@@ -110,7 +110,7 @@ sound.Add({
 })
 
 surface.CreateFont("ParagonMenuButton", {
-    font = "Courier New", -- You can use other font names if needed
-    size = 56,      -- Set the size (scale) of the font here
+    font = "Courier New",
+    size = 56,
     weight = 500,
 })

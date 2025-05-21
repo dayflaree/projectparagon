@@ -28,10 +28,10 @@ function CHAR:IsSiteDirector()
 	return self:GetFaction() == FACTION_SITEDIRECTOR
 end
 
-function CHAR:IsSCP()
-	return self:GetFaction() == FACTION_SCP
-end
-
 function CHAR:IsCI()
 	return self:GetFaction() == FACTION_CI
+end
+
+function CHAR:IsSCP()
+	return self:GetFaction() == FACTION_SCP
 end

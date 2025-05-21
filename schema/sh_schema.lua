@@ -11,7 +11,7 @@ ix.util.Include("sv_schema.lua")
 ix.util.IncludeDir("hooks")
 ix.util.IncludeDir("meta")
 
--- Schema config
+--Schema config
 
 local config = {
     color = Color(255, 255, 255),
@@ -29,13 +29,12 @@ local config = {
     allowGlobalOOC = false,
     chatColor = Color(255, 217, 67),
     chatListenColor = Color(107, 193, 78),
-    paSystemEnabled = true,
+    --paSystemEnabled = true,
     allowBusiness = false,
     runRankHook = true,
     maxCharacters = 4,
     inventoryHeight = 2,
     inventoryWidth = 5,
-    animMaxRate = 1,
     walkSpeed = 80,
     runSpeed = 180,
     staminaDrain = 2.6,

@@ -28,10 +28,10 @@ function PLAYER:IsSiteDirector()
 	return self:Team() == FACTION_SITEDIRECTOR
 end
 
-function PLAYER:IsSCP()
-	return self:Team() == FACTION_SCP
-end
-
 function PLAYER:IsCI()
 	return self:Team() == FACTION_CI
+end
+
+function PLAYER:IsSCP()
+	return self:Team() == FACTION_SCP
 end
