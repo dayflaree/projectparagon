@@ -2,11 +2,18 @@ FACTION.name = "Scientific Department"
 FACTION.color = Color(255, 166, 166)
 FACTION.isDefault = false
 FACTION.models = {"models/cpthazama/scp/scientist.mdl"}
+FACTION.introMusic = "projectparagon/sfx/Music/Intro.ogg"
 
 FACTION.defaultHealth = 100
 FACTION.maxHealth = 100
 FACTION.defaultArmor = 100
 FACTION.maxArmor = 200
+
+FACTION.radioConfig = {
+    breathingLoop = {
+        enabled = false,
+    }
+}
 
 function FACTION:OnCharacterCreated(ply, char)
     char:SetName("Dr. "..char:GetName())

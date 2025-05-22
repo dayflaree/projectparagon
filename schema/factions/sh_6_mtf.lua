@@ -1,15 +1,24 @@
 FACTION.name = "Mobile Task Force"
 FACTION.color = Color(173, 125, 78)
 FACTION.isDefault = false
-FACTION.models = {
-    "models/cpthazama/scp/ntf.mdl",
-}
+FACTION.models = {"models/cpthazama/scp/ntf.mdl"}
+FACTION.introMusic = "projectparagon/sfx/Music/Intro1.ogg"
+
+FACTION.defaultHealth = 100
+FACTION.maxHealth = 100
+FACTION.defaultArmor = 100
+FACTION.maxArmor = 200
 
 FACTION.radioConfig = {
     startVoice = "projectparagon/sfx/Character/MTF/radio_beep1.mp3",
     endVoice = "projectparagon/sfx/Character/MTF/radio_beep2.mp3",
     startTyping = "projectparagon/sfx/Character/MTF/radio_beep1.mp3",
     endTyping = "projectparagon/sfx/Character/MTF/radio_beep2.mp3",
+    messageSentSound = "projectparagon/sfx/Character/MTF/radio_beep3.ogg",
+    breathingLoop = {
+        enabled = true,
+        volume = 0.15
+    }
 }
 
 function FACTION:ModifyPlayerStep(client, data)
@@ -27,11 +36,6 @@ function FACTION:ModifyPlayerStep(client, data)
 
     return false
 end
-
-FACTION.defaultHealth = 100
-FACTION.maxHealth = 100
-FACTION.defaultArmor = 100
-FACTION.maxArmor = 200
 
 function FACTION:OnCharacterCreated(ply, char)
     char:SetName("JO. "..char:GetName())

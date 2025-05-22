@@ -37,7 +37,7 @@ end
 
 function Schema:PostPlayerSay(client, chatType, message, anonymous)
     if (chatType == "ic") then
-        ix.log.Add(client, "chat", chatType and chatType:utf8upper() or "??", text or message)
+        ix.log.Add(client, "chat", chatType and chatType:utf8upper() or "??", message) -- Changed 'text or message' to 'message'
     end
 end
 
@@ -79,12 +79,23 @@ for _, idString in ipairs(RECOGNIZED_ARMOR_ITEM_IDS_LIST) do
 end
 RECOGNIZED_ARMOR_ITEM_IDS_LIST = nil
 
+local EXEMPT_FACTION_INDICES = {
+    [FACTION_SECURITY] = true,
+    [FACTION_MTF] = true,
+    [FACTION_CI] = true,
+}
+
 function Schema:EnsureCorrectArmorState(ply)
     if not IsValid(ply) or not ply:IsPlayer() then return end
 
     local char = ply:GetCharacter()
     if not char then
         if ply:Armor() > 0 then ply:SetArmor(0) end
+        return
+    end
+
+    local playerFactionIndex = char:GetFaction()
+    if EXEMPT_FACTION_INDICES[playerFactionIndex] then
         return
     end
 
@@ -103,21 +114,20 @@ function Schema:EnsureCorrectArmorState(ply)
     end
 
     for instanceInventoryID, itemInstance in pairs(itemsInInventory) do
-        if (itemInstance and type(itemInstance) == "table" and itemInstance.IsEquipped) then
-            if (itemInstance:IsEquipped()) then
-                local itemDefinitionID = itemInstance.uniqueID
+        if (itemInstance and type(itemInstance) == "table" and itemInstance.isEquipped) then -- Changed IsEquipped to isEquipped (field access)
+            -- if (itemInstance:isEquipped()) then -- Assuming isEquipped is a field, not a method. Changed :IsEquipped() to .isEquipped
+            local itemDefinitionID = itemInstance.uniqueID
 
-                if (itemDefinitionID and ARMOR_ITEM_SET[itemDefinitionID]) then
-                    hasRecognizedArmorEquipped = true
-                    break
-                end
+            if (itemDefinitionID and ARMOR_ITEM_SET[itemDefinitionID]) then
+                hasRecognizedArmorEquipped = true
+                break
             end
+            -- end
         end
     end
 
     if not hasRecognizedArmorEquipped then
         if ply:Armor() > 0 then
-            local previousArmor = ply:Armor()
             ply:SetArmor(0)
         end
     end
@@ -252,16 +262,18 @@ function HOOKS:PlayerLoadedCharacter(client)
     end)
 end
 
-function HOOKS:PostPlayerLoadout(ply)
+hook.Add("PostPlayerLoadout", "Paragon_StripKeys_PostPlayerLoadout_FromPlugin", function(ply)
     timer.Simple(0.1, function()
-        if (IsValid(ply)) then
-            ply:StripWeapon("ix_keys")
+        if IsValid(ply) and ply:IsPlayer() then
+            if ply:HasWeapon("ix_keys") then
+                ply:StripWeapon("ix_keys")
+            end
         end
     end)
-end
+end)
 
 function HOOKS:PlayerSwitchWeapon(ply, oldWep, newWep)
-    if not (IsValid(newWep) and type(newWep.GetClass) == "function") then
+    if not (IsValid(newWep) and newWep:IsWeapon()) then -- Changed check to IsWeapon()
         return
     end
 

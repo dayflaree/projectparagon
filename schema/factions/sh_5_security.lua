@@ -1,15 +1,23 @@
 FACTION.name = "Security Department"
 FACTION.color = Color(199, 199, 199)
 FACTION.isDefault = false
-FACTION.models = {
-    "models/cpthazama/scp/guard.mdl",
-}
+FACTION.models = {"models/cpthazama/scp/guard.mdl"}
+FACTION.introMusic = "projectparagon/sfx/Music/Intro.ogg"
+
+FACTION.defaultHealth = 100
+FACTION.maxHealth = 100
+FACTION.defaultArmor = 100
+FACTION.maxArmor = 200
 
 FACTION.radioConfig = {
     startVoice = "projectparagon/sfx/Character/MTF/radio_beep1.mp3",
     endVoice = "projectparagon/sfx/Character/MTF/radio_beep2.mp3",
     startTyping = "projectparagon/sfx/Character/MTF/radio_beep1.mp3",
     endTyping = "projectparagon/sfx/Character/MTF/radio_beep2.mp3",
+    messageSentSound = "projectparagon/sfx/Character/MTF/radio_beep3.ogg",
+    breathingLoop = {
+        enabled = false,
+    }
 }
 
 function FACTION:ModifyPlayerStep(client, data)
@@ -28,11 +36,6 @@ function FACTION:ModifyPlayerStep(client, data)
 
     return false
 end
-
-FACTION.defaultHealth = 100
-FACTION.maxHealth = 100
-FACTION.defaultArmor = 100
-FACTION.maxArmor = 200
 
 function FACTION:OnCharacterCreated(ply, char)
     char:SetName("JSO. "..char:GetName())

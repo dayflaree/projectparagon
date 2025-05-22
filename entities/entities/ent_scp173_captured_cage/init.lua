@@ -8,7 +8,7 @@ util.AddNetworkString("SCP173_Cage_PlayerAttemptUse")
 
 function ENT:Initialize()
     self:SetModel("models/cpthazama/scp/items/173_box.mdl")
-    self:PhysicsInit(SOLID_NONE)
+    self:PhysicsInit(SOLID_VPHYSICS) -- Changed SOLID_NONE to SOLID_VPHYSICS
     self:SetMoveType(MOVETYPE_NOCLIP)
     self:SetSolid(SOLID_NONE)
     self:SetCollisionGroup(COLLISION_GROUP_PASSABLE_DOOR)

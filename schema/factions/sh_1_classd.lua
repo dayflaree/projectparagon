@@ -2,11 +2,18 @@ FACTION.name = "Class D Personnel"
 FACTION.color = Color(170, 112, 53)
 FACTION.isDefault = true
 FACTION.models = {"models/cpthazama/scp/dclass.mdl"}
+FACTION.introMusic = "projectparagon/sfx/Music/Intro.ogg"
 
 FACTION.defaultHealth = 100
 FACTION.maxHealth = 100
 FACTION.defaultArmor = 100
 FACTION.maxArmor = 200
+
+FACTION.radioConfig = {
+    breathingLoop = {
+        enabled = false,
+    }
+}
 
 function FACTION:OnCharacterCreated(ply, char)
     char:SetName("D-"..Schema:ZeroNumber(math.random(1, 9999), 4).." "..char:GetName())
