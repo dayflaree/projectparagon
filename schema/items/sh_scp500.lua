@@ -23,7 +23,6 @@ ITEM.Volume = 80
 
 ITEM.functions.Apply = {
 	name = "Use",
-	icon = "icon16/heart.png",
 	OnCanRun = function(itemTable)
 		local ply = itemTable.player
 

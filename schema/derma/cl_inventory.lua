@@ -107,7 +107,7 @@ function PANEL:DoRightClick()
 						end
 					itemTable.player = nil
 				end)
-				subMenuOption:SetImage(v.icon or "icon16/brick.png")
+				subMenuOption:SetImage(v.icon)
 
 				if (v.multiOptions) then
 					local options = isfunction(v.multiOptions) and v.multiOptions(itemTable, LocalPlayer()) or v.multiOptions
@@ -149,7 +149,7 @@ function PANEL:DoRightClick()
 							InventoryAction(k, itemTable.id, inventory)
 						end
 					itemTable.player = nil
-				end):SetImage(v.icon or "icon16/brick.png")
+				end):SetImage(v.icon)
 			end
 		end
 
@@ -173,7 +173,7 @@ function PANEL:DoRightClick()
 						InventoryAction("drop", itemTable.id, inventory)
 					end
 				itemTable.player = nil
-			end):SetImage(info.icon or "icon16/brick.png")
+			end):SetImage(info.icon)
 		end
 
 		menu:Open()

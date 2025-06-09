@@ -32,7 +32,6 @@ local absorbingFactions = {
 ITEM.functions.Equip = {
     name = "Equip",
     tip = "equipTip",
-    icon = "icon16/tick.png",
     OnRun = function(item)
         local ply = item.player
         local char = ply and ply:GetCharacter()

@@ -79,7 +79,6 @@ end)
 ITEM.functions.EquipUn = { -- sorry, for name order.
     name = "Unequip",
     tip = "equipTip",
-    icon = "icon16/cross.png",
     OnRun = function(item)
         item:Unequip(item.player, true)
         return false
@@ -96,7 +95,6 @@ ITEM.functions.EquipUn = { -- sorry, for name order.
 ITEM.functions.Equip = {
     name = "Equip",
     tip = "equipTip",
-    icon = "icon16/tick.png",
     OnRun = function(item)
         item:Equip(item.player)
         return false

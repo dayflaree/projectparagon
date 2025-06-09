@@ -1,5 +1,3 @@
--- File: sh_item_scp173_cage.lua
-
 ITEM.name = "Containment Cage"
 ITEM.uniqueID = "scp173_containment_cage"
 ITEM.model = "models/cpthazama/scp/items/173_box.mdl"
@@ -7,87 +5,120 @@ ITEM.width = 1
 ITEM.height = 1
 ITEM.category = "Tools"
 
+local function OnCanRun(client)
+    if ( !IsValid(client) or !client:Alive() ) then
+        ErrorNoHaltWithStack("Capture failed: Invalid client or client not alive.")
+        return false
+    end
+
+    local trace = client:GetEyeTrace()
+    if ( !IsValid(trace.Entity) or trace.Entity:GetClass() != "npc_cpt_scp_173" ) then
+        return false
+    end
+
+    local targetSCP173 = trace.Entity
+    local distance = client:GetShootPos():DistToSqr(targetSCP173:WorldSpaceCenter())
+    local captureRange = 128 ^ 2
+    if ( distance > captureRange ) then
+        return false
+    end
+
+    local targetPoint = targetSCP173:WorldSpaceCenter()
+    local toSCPVector = (targetPoint - client:EyePos()):GetNormalized()
+    local aimDotProduct = client:GetAimVector():Dot(toSCPVector)
+    local requiredDotProduct = 0.65
+    if ( aimDotProduct < requiredDotProduct ) then
+        return false
+    end
+
+    if ( targetSCP173.IsContained ) then
+        return false
+    end
+
+    if ( !IsValid(targetSCP173) ) then
+        return false
+    end
+
+    return true
+end
+
 ITEM.functions.Capture = {
     name = "Capture",
-    tip = "captureTip",
-    icon = "icon16/arrow_down.png",
     OnRun = function(item)
-        local ply = item.player
-        if not IsValid(ply) or not ply:Alive() then return false end
-
-        local trace = ply:GetEyeTrace()
-
-        if not IsValid(trace.Entity) or trace.Entity:GetClass() ~= "npc_cpt_scp_173" then
-            ply:Notify("No valid target.")
-            return false
-        end
-
+        local client = item.player
+        local trace = client:GetEyeTrace()
         local targetSCP173 = trace.Entity
-        local distance = ply:GetShootPos():Distance(targetSCP173:WorldSpaceCenter())
-        local captureRange = 120
-        if distance > captureRange then
-            ply:Notify("Target is too far away. (Dist: " .. string.format("%.0f", distance) .. "/" .. captureRange .. ")")
-            return false
-        end
 
-        local targetPoint = targetSCP173:WorldSpaceCenter()
-        local toSCPVector = (targetPoint - ply:EyePos()):GetNormalized()
-        local aimDotProduct = ply:GetAimVector():Dot(toSCPVector)
-        local requiredDotProduct = 0.65
-
-        if aimDotProduct < requiredDotProduct then
-            ply:Notify("You must be looking more directly at target. (Aim Dot: " .. string.format("%.2f", aimDotProduct) .. "/" .. requiredDotProduct .. ")")
-            return false
-        end
-
-        -- =================================================================
-        -- DISABLE SCP-173's AI USING ITS NATIVE 'IsContained' FLAG
-        -- =================================================================
-        if not IsValid(targetSCP173) then return false end
-
-        targetSCP173.IsContained = true -- This should make its OnThink() return early
-        targetSCP173:CPT_StopMovement() -- Stop any current movement/schedule
-        targetSCP173:SetVelocity(vector_origin)
-        if IsValid(targetSCP173.IdleMoveSound) and targetSCP173.IdleMoveSound.Stop then -- Stop its movement sound
-            targetSCP173.IdleMoveSound:Stop()
-        end
-        targetSCP173:SetActivity(ACT_IDLE) -- Set to idle animation
-        print("[SCP173 Cage] Set targetSCP173.IsContained = true")
-        -- =================================================================
-
-        local cageEntity = ents.Create("ent_scp173_captured_cage")
-        if not IsValid(cageEntity) then
-            ply:Notify("Failed to create containment cage entity.")
-            if IsValid(targetSCP173) then
-                targetSCP173.IsContained = false -- Revert if cage fails
+        client:SetAction("Capturing SCP-173...", 30)
+        client:DoStaredAction(targetSCP173, function()
+            if ( !OnCanRun(client) ) then
+                ErrorNoHaltWithStack("Capture failed: OnCanRun check failed.")
+                return false
             end
-            return false
-        end
 
-        cageEntity:SetPos(targetSCP173:GetPos())
-        cageEntity:SetAngles(targetSCP173:GetAngles())
-        cageEntity:Spawn()
+            targetSCP173.IsContained = true
+            targetSCP173:CPT_StopMovement()
+            targetSCP173:SetVelocity(vector_origin)
 
-        cageEntity:SetOwnerPlayer(ply)
-        cageEntity:SetCapturedSCP(targetSCP173)
-            
-        local zOffset = 10 -- TEST AND ADJUST THIS VALUE!
+            if ( IsValid(targetSCP173.IdleMoveSound) and targetSCP173.IdleMoveSound.Stop ) then
+                targetSCP173.IdleMoveSound:Stop()
+            end
 
-        targetSCP173:SetParent(cageEntity)
-        targetSCP173:SetLocalPos(Vector(0, 0, zOffset))
-        targetSCP173:SetLocalAngles(Angle(0, 0, 0)) 
+            targetSCP173:SetActivity(ACT_IDLE)
 
-        targetSCP173:SetSolid(SOLID_NONE)
-        targetSCP173:SetMoveType(MOVETYPE_NONE) 
-        targetSCP173:SetCollisionGroup(COLLISION_GROUP_DEBRIS) 
+            local cageEntity = ents.Create("ent_scp173_captured_cage")
+            if ( !IsValid(cageEntity) ) then
+                ErrorNoHaltWithStack("Failed to create ent_scp173_captured_cage entity.")
 
-        ply:EmitSound("projectparagon/sfx/Door/BigDoorStartsOpenning.ogg") 
-        item:Remove()
+                if ( IsValid(targetSCP173) ) then
+                    targetSCP173.IsContained = false
+                end
 
-        return true 
+                return false
+            end
+
+            cageEntity:SetPos(targetSCP173:GetPos())
+            cageEntity:SetAngles(targetSCP173:GetAngles())
+            cageEntity:Spawn()
+
+            cageEntity:SetOwnerPlayer(client)
+            cageEntity:SetCapturedSCP(targetSCP173)
+
+            local zOffset = 10
+
+            targetSCP173:SetParent(cageEntity)
+            targetSCP173:SetLocalPos(Vector(0, 0, zOffset))
+            targetSCP173:SetLocalAngles(Angle(0, 0, 0))
+
+            targetSCP173:SetSolid(SOLID_NONE)
+            targetSCP173:SetMoveType(MOVETYPE_NONE)
+            targetSCP173:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
+
+            client:EmitSound("projectparagon/sfx/Door/BigDoorStartsOpenning.ogg")
+            item:Remove()
+        end, 30, function()
+            client:SetAction()
+
+            local character = client:GetCharacter()
+            if ( !character ) then
+                ErrorNoHaltWithStack("Capture failed: Invalid character.")
+                return false
+            end
+
+            local inventory = character:GetInventory()
+            if ( !inventory ) then
+                ErrorNoHaltWithStack("Capture failed: Invalid inventory.")
+                return false
+            end
+
+            if ( !inventory:Add(item.uniqueID, 1) ) then
+                ix.item.Spawn(item.uniqueID, client)
+            end
+        end, 128)
+
+        return true
     end,
     OnCanRun = function(item)
-        local ply = item.player
-        return IsValid(ply) and ply:Alive() and not IsValid(item.entity)
+        return OnCanRun(item.player)
     end
 }

@@ -75,7 +75,6 @@ end)
 ITEM.functions.Repair = {
     name = "Repair",
     tip = "repairTip",
-    icon = "icon16/wrench.png",
     OnRun = function(item)
         item:Repair(item.player)
         item.player:GetCharacter():GetInventory():HasItem("tool_repair"):Remove()
@@ -90,7 +89,6 @@ ITEM.functions.Repair = {
 ITEM.functions.EquipUn = {
     name = "Unequip",
     tip = "unequipTip",
-    icon = "icon16/cross.png",
     OnRun = function(item)
         if (item.player) then
             item:RemoveOutfit(item.player)
@@ -119,7 +117,6 @@ ITEM.functions.EquipUn = {
 ITEM.functions.Equip = {
     name = "Equip",
     tip = "equipTip",
-    icon = "icon16/tick.png",
     OnRun = function(item, creationClient)
         local ply = item.player or creationClient
         local char = ply:GetCharacter()
